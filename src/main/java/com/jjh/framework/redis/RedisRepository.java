@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -115,5 +116,40 @@ public class RedisRepository {
      */
     public Object get(String key) {
         return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
+     * 获取一定范围内的对象
+     * @param key
+     * @param start
+     * @param end
+     * @return
+     */
+    public Set<Object> zSetRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().reverseRange(key, start, end);
+    }
+
+    /**
+     * 获取一定范围内的对象
+     * @return
+     */
+    public Boolean zSetAdd(String key, Object value) {
+        return redisTemplate.opsForZSet().add(key, value, 0);
+    }
+
+    /**
+     * 获取一定范围内的对象
+     * @return
+     */
+    public Long zSetDelete(String key, Object value) {
+        return redisTemplate.opsForZSet().remove(key, value);
+    }
+
+    /**
+     * 获取一定范围内的对象
+     * @return
+     */
+    public Long zSetSize(String key) {
+        return redisTemplate.opsForZSet().size(key);
     }
 }

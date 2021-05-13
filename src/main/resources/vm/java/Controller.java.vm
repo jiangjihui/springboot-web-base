@@ -41,7 +41,7 @@ public class ${ClassName}Controller extends BaseController {
      * ${tableComment}列表
      */
     @ApiOperation("${tableComment}列表")
-    @ApiOperationSupport(order = 0)
+    @ApiOperationSupport(order = 10)
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<${classEntity}>> list(@RequestBody PageRequestForm<${classEntity}> form) {
         List<${classEntity}> list = ${className}Service.list(form);
@@ -53,7 +53,7 @@ public class ${ClassName}Controller extends BaseController {
      */
     @Log(title = "新增${tableComment}", businessType = BusinessType.INSERT)
     @ApiOperation("新增${tableComment}")
-    @ApiOperationSupport(order = 1, ignoreParameters = {"id","createTime","updateTime","createBy","updateBy"})
+    @ApiOperationSupport(order = 20, ignoreParameters = {"id","createTime","updateTime","createBy","updateBy"})
     @PostMapping("/add")
     public SimpleResponseForm<${classEntity}> add(@Valid @RequestBody ${classEntity} entity) {
         ${classEntity} result = ${className}Service.add(entity);
@@ -65,7 +65,7 @@ public class ${ClassName}Controller extends BaseController {
      */
     @Log(title = "更新${tableComment}", businessType = BusinessType.UPDATE)
     @ApiOperation("更新${tableComment}")
-    @ApiOperationSupport(order = 2, ignoreParameters = {"createTime","updateTime","createBy","updateBy"})
+    @ApiOperationSupport(order = 30, ignoreParameters = {"createTime","updateTime","createBy","updateBy"})
     @PostMapping("/update")
     public SimpleResponseForm<${classEntity}> update(@Valid @RequestBody ${classEntity} entity) {
         ${classEntity} result = ${className}Service.update(entity);
@@ -77,7 +77,7 @@ public class ${ClassName}Controller extends BaseController {
      */
     @Log(title = "删除${tableComment}", businessType = BusinessType.DELETE)
     @ApiOperation("删除${tableComment}")
-    @ApiOperationSupport(order = 3)
+    @ApiOperationSupport(order = 40)
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
         ${className}Service.del(ids);
@@ -90,7 +90,7 @@ public class ${ClassName}Controller extends BaseController {
      * @return
      */
     @ApiOperation(value = "${tableComment}导入模板")
-    @ApiOperationSupport(order = 4)
+    @ApiOperationSupport(order = 50)
     @GetMapping("/import_template")
     public SimpleResponseForm<String> importTemplate() {
         ExcelUtil<${classEntity}> util = new ExcelUtil<>(${classEntity}.class);
@@ -103,7 +103,7 @@ public class ${ClassName}Controller extends BaseController {
      */
     @Log(title = "${tableComment}导入", businessType = BusinessType.IMPORT)
     @ApiOperation(value = "${tableComment}导入")
-    @ApiOperationSupport(order = 5)
+    @ApiOperationSupport(order = 60)
     @PostMapping("/import_data")
     public SimpleResponseForm<String> importData(MultipartFile file, boolean updateSupport) {
         if (file == null) {
@@ -122,7 +122,7 @@ public class ${ClassName}Controller extends BaseController {
      */
     @Log(title = "${tableComment}导出", businessType = BusinessType.EXPORT)
     @ApiOperation("${tableComment}导出")
-    @ApiOperationSupport(order = 6)
+    @ApiOperationSupport(order = 70)
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<${classEntity}> form) {
         List<${classEntity}> list = ${className}Service.list(form);

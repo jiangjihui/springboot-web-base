@@ -1,5 +1,7 @@
 package com.jjh.business.system.user.controller;
 
+import com.jjh.business.system.record.model.OnlineLog;
+import com.jjh.business.system.record.service.OnlineLogService;
 import com.jjh.business.system.user.controller.form.LoginForm;
 import com.jjh.business.system.user.model.SysUser;
 import com.jjh.business.system.user.service.SysUserService;
@@ -15,10 +17,12 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -36,6 +40,9 @@ public class LoginController extends BaseController {
 
     @Autowired
     private SysUserService sysUserService;
+
+    @Autowired
+    private OnlineLogService onlineLogService;
     @Autowired
     private RedisRepository redisRepository;
 
@@ -47,7 +54,7 @@ public class LoginController extends BaseController {
      */
     @ApiOperation("用户登录")
     @PostMapping("/login")
-    public SimpleResponseForm<SysUser> login(@Valid @RequestBody LoginForm form) {
+    public SimpleResponseForm<SysUser> login(@Valid @RequestBody LoginForm form, HttpServletRequest request) {
         String username = form.getUsername();
         String password = form.getPassword();
 
@@ -62,9 +69,10 @@ public class LoginController extends BaseController {
 
         // 生成token
         String sign = JwtUtil.sign(username, passwd, sysUser.getId());
-        redisRepository.set(CacheConstants.SYS_USER_TOKEN, sign, sign, JwtUtil.EXPIRE_TIME * 2, TimeUnit.MILLISECONDS);
-
         sysUser.setToken(sign);
+        OnlineLog onlineLog = onlineLogService.add(sysUser, request);
+        redisRepository.set(CacheConstants.SYS_USER_TOKEN, sign, onlineLog, JwtUtil.EXPIRE_TIME * 2, TimeUnit.MILLISECONDS);
+        redisRepository.zSetAdd(CacheConstants.SYS_USER_TOKEN, onlineLog);
 
         //获取用户角色
         List<String> roleList = sysUserService.listSysRoleCode(sysUser.getId());
@@ -74,35 +82,6 @@ public class LoginController extends BaseController {
         sysUser.setPermissionCode(permissionList);
 
         return success(sysUser);
-
-        // Shiro安全验证
-/*        Subject subject = SecurityUtils.getSubject();
-        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        String msg = "";
-        try {
-            // 验证用户名密码
-            subject.login(token);
-            userInfo.getPassword()(ShiroUtils.getUserInfo());
-        }
-        catch (IncorrectCredentialsException e) {
-            msg = "登录密码错误";
-        } catch (ExcessiveAttemptsException e) {
-            msg = "登录失败次数过多";
-        } catch (LockedAccountException e) {
-            msg = "帐号已被锁定";
-        } catch (DisabledAccountException e) {
-            msg = "帐号已被禁用";
-        } catch (ExpiredCredentialsException e) {
-            msg = "帐号已过期";
-        } catch (UnknownAccountException e) {
-            msg = "帐号不存在";
-        } catch (UnauthorizedException e) {
-            msg = "您没有得到相应的授权！";
-        } catch (Exception e) {
-            logger.info("系统异常：{}", e.getMessage());
-        }
-        logger.info(msg+" username:{}", username);
-        return error(msg);*/
     }
 
     /**
@@ -117,6 +96,20 @@ public class LoginController extends BaseController {
     public SimpleResponseForm<SysUser> register(@Valid @RequestBody SysUser sysUser) throws Exception {
         SysUser user = sysUserService.add(sysUser);
         return success(user);
+    }
+
+    /**
+     * 用户退出
+     */
+    @ApiOperation("用户退出")
+    @GetMapping("/logout")
+    public SimpleResponseForm<String> logout() {
+        String token = JwtUtil.getToken();
+        OnlineLog onlineLog = (OnlineLog) redisRepository.get(CacheConstants.SYS_USER_TOKEN, token);
+        redisRepository.zSetDelete(CacheConstants.SYS_USER_TOKEN, onlineLog);
+        // TODO 需要创建定时任务 定时清理界面上不再操作自动过期的用户
+        redisRepository.delete(CacheConstants.SYS_USER_TOKEN, token);
+        return success();
     }
 
 }

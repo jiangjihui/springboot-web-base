@@ -1,6 +1,7 @@
 package com.jjh.framework.shiro;
 
 import cn.hutool.core.util.StrUtil;
+import com.jjh.business.system.record.model.OnlineLog;
 import com.jjh.business.system.user.model.SysUser;
 import com.jjh.business.system.user.service.SysUserService;
 import com.jjh.common.constant.BaseConstants;
@@ -146,12 +147,14 @@ public class MyShiroRealm extends AuthorizingRealm {
      */
     public boolean jwtTokenVerifyAndRefresh(String token, String username, String password, String userId) {
         String redisKey = CacheConstants.SYS_USER_TOKEN;
-        String redisToken = (String) redisRepository.get(redisKey, token);
-        if (StrUtil.isNotBlank(redisToken)) {
+        OnlineLog onlineLog = (OnlineLog) redisRepository.get(redisKey, token);
+        if (onlineLog != null) {
+            String redisToken = onlineLog.getToken();
             // JWT过期需要刷新token
             if (!JwtUtil.verify(redisToken, username, password)) {
                 String newToken = JwtUtil.sign(username, password, userId);
-                redisRepository.set(redisKey, token, newToken, JwtUtil.EXPIRE_TIME * 2, TimeUnit.MILLISECONDS);
+                onlineLog.setToken(newToken);
+                redisRepository.set(redisKey, token, onlineLog, JwtUtil.EXPIRE_TIME * 2, TimeUnit.MILLISECONDS);
             }
             return true;
         }

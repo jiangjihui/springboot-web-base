@@ -77,7 +77,7 @@ public class SwaggerConfig implements ApplicationContextAware {
                         apiPackage = RequestHandlerSelectors.basePackage(str);
                     }
                     else {
-                        apiPackage.or(RequestHandlerSelectors.basePackage(str));
+                        apiPackage = apiPackage.or(RequestHandlerSelectors.basePackage(str));
                     }
                 }
                 docket
