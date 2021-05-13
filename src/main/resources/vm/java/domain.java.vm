@@ -1,0 +1,27 @@
+package ${package}.model;
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+
+
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
+import static ${package}.model.${classEntity}.TABLE_NAME;
+
+/**
+ * ${tableComment}信息
+ *
+ * @author ${author}
+ * @date ${datetime}
+ */
+@ApiModel("${tableComment}信息")
+@Data
+@Entity
+@Table(name = TABLE_NAME)
+public class ${classEntity} extends AuditBaseEntity {
+
+    public static final String TABLE_NAME = TABLE_PREFIX+"${classname}";
+
+
+}
