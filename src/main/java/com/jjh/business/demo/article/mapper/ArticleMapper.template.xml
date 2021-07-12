@@ -4,8 +4,8 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jjh.business.demo.article.mapper.ArticleMapper">
 
-    <select id="selectOneObject" resultType="com.jjh.business.demo.article.model.Article">
-        select * from article limit 1
+    <select id="selectAllList" resultType="com.jjh.business.demo.article.model.Article">
+        select * from article
     </select>
 
 </mapper>

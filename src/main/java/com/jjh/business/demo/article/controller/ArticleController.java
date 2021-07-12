@@ -3,6 +3,7 @@ package com.jjh.business.demo.article.controller;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
+import com.jjh.business.demo.article.mapper.ArticleMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.business.demo.article.service.ArticleService;
 import com.jjh.common.web.controller.BaseController;
@@ -14,8 +15,13 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -27,11 +33,14 @@ import java.util.List;
 */
 @Api(tags = "文章管理")
 @RestController
-@RequestMapping("/demo/article/article")
+@RequestMapping("/demo/article")
 public class ArticleController extends BaseController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Resource
+    private ArticleMapper articleMapper;
 
 
     /**
@@ -100,5 +109,23 @@ public class ArticleController extends BaseController {
         }catch (Exception e){
             return code;
         }
+    }
+
+    /**
+     * selectAll
+     */
+    @ApiOperation("selectAll")
+    @GetMapping("/select_all")
+    public SimpleResponseForm<List<Article>> selectAll() {
+        return success(articleMapper.selectAllList());
+    }
+
+    /**
+     * selectAll
+     */
+    @ApiOperation("selectOne")
+    @GetMapping("/selectOne")
+    public SimpleResponseForm<Article> selectOne() {
+        return success(articleMapper.selectOneObject());
     }
 }

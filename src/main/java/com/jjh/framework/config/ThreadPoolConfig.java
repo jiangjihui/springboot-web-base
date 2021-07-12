@@ -12,6 +12,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 线程池配置
+ * 用于异步保存操作日志
  *
  * @author ruoyi
  **/
