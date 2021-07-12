@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.20, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.24, for Win64 (x86_64)
 --
 -- Host: localhost    Database: web-base
 -- ------------------------------------------------------
@@ -7,7 +7,7 @@
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -21,7 +21,7 @@
 
 DROP TABLE IF EXISTS `article`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `article` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -42,7 +42,7 @@ CREATE TABLE `article` (
 
 LOCK TABLES `article` WRITE;
 /*!40000 ALTER TABLE `article` DISABLE KEYS */;
-INSERT INTO `article` VALUES ('8058626696101265408','2021-03-12 16:08:59.664','2021-03-12 16:09:27.870','7888631140367998976','7888631140367998976','22212221','2啊',NULL,'222草2122啊22112啊');
+INSERT INTO `article` VALUES ('8058626696101265408','2021-03-12 16:08:59.664','2021-03-12 16:09:27.870','7888631140367998976','7888631140367998976','hi','2啊',1,'222草2122啊22112啊'),('8091540653978714112','2021-06-11 11:57:18.734',NULL,'','','weq','saaww',0,''),('8091541221039177728','2021-06-11 11:59:34.001',NULL,'','','rtt','eee',0,''),('8091623143410008064','2021-06-11 17:25:05.788',NULL,'','','信息需','eee',0,''),('8091624957449633792','2021-06-11 17:32:18.287',NULL,'','','信息需','eee',0,'');
 /*!40000 ALTER TABLE `article` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -52,7 +52,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `file_info`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `file_info` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -78,12 +78,45 @@ LOCK TABLES `file_info` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `online_log`
+--
+
+DROP TABLE IF EXISTS `online_log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `online_log` (
+  `id` varchar(40) NOT NULL,
+  `create_time` datetime(3) DEFAULT NULL,
+  `update_time` datetime(3) DEFAULT NULL,
+  `create_by` varchar(40) DEFAULT NULL,
+  `update_by` varchar(40) DEFAULT NULL,
+  `token` varchar(255) NOT NULL COMMENT 'token',
+  `user_id` varchar(40) DEFAULT NULL COMMENT '用户ID',
+  `ip_addr` varchar(40) DEFAULT NULL COMMENT '登录IP地址',
+  `browser` varchar(100) DEFAULT NULL COMMENT '浏览器类型',
+  `os` varchar(100) DEFAULT NULL COMMENT '操作系统',
+  `login_time` datetime(3) DEFAULT NULL COMMENT '登录时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='在线日志';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `online_log`
+--
+
+LOCK TABLES `online_log` WRITE;
+/*!40000 ALTER TABLE `online_log` DISABLE KEYS */;
+INSERT INTO `online_log` VALUES ('8081102188409028608','2021-05-13 16:38:34.602',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDIzMTQsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.hyEjh6_oX4g0QxleZ9zYTxk5odjYNeldPL2WrU5VWYM','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 16:38:34.602'),('8081105678917206016','2021-05-13 16:52:26.851',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDMxNDYsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.Eg5I4GM4WArbrdinBJk0lR2G-01GkhScLEYHURQL1ms','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 16:52:26.804'),('8081105801646735360','2021-05-13 16:52:56.066',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDMxNzYsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.Ui5UnMe-nVhkOeOa5LL6vUnIIUQoBwEs1k-4Kd8HDXc','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 16:52:56.065'),('8081108339572375552','2021-05-13 17:03:01.226',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDM3ODEsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.cPuJwirkopayQKTkhtkBEgAXo-FwX2yrAygWS2yoywY','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:03:01.153'),('8081108629679800320','2021-05-13 17:04:10.320',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDM4NTAsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.RNCPjHE5H4z4wcYTgKAx_SSUU2R4Ye47qgV9P6-fo34','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:04:10.320'),('8081109098685825024','2021-05-13 17:06:02.186',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDM5NjIsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.Rt6c_KVRz-a60-0IiofF9cjEYRwCNcDEgXO77kSn-z0','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:06:02.140'),('8081111028593623040','2021-05-13 17:13:42.315',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDQ0MjIsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.ba_fNO9in9DAFkMZfEykIqS84G8CNA9wVHvFU0xbMnM','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:13:42.266'),('8081111316965130240','2021-05-13 17:14:51.062',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDQ0OTAsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.5NobonYqkc6dFUK5k61L7AC00dGKn1RDPm3Gaadx9UU','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:14:51.019'),('8081111955124289536','2021-05-13 17:17:23.214',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDQ2NDMsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.rASg0BPb5qccKyr9emwdWcTqjpTw_GR9P8B23l_UqCQ','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:17:23.168'),('8081112319001133056','2021-05-13 17:18:49.924',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDQ3MjksInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.Bm-0wd_ywHh8o0AUGtKQA7_VErj9O9WntS2l7hnCov4','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:18:49.923'),('8081112425481928704','2021-05-13 17:19:15.311',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDQ3NTUsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.ebaLHJwz522cEmjMwgdgQwbZoEAps1ChkvO-Ozw0tgQ','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:19:15.310'),('8081119903819530240','2021-05-13 17:48:58.353',NULL,'7888631140367998976',NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjA5MDY1MzgsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.0mqRSRfEwZm6LNHURs_NWKV9Sv15wi6AViqMTix4WS8','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-13 17:48:58.285'),('8083981892699324416','2021-05-21 15:21:29.617',NULL,'7888631140367998976',NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjE1ODg4ODksInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.Ye8JFOtmSJN5-aQ-iW6WrSVMUSsI-Hyf_RqmRz7Mv9c','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-05-21 15:21:29.607'),('8091540361006579712','2021-06-11 11:56:08.892',NULL,'7888631140367998976',NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjMzOTA5NjgsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.GnAWA_61l2sJXOh_JT8kyIQxURqaSlCnX-gc-5KMxuI','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-06-11 11:56:08.881'),('8098424705164279808','2021-06-30 11:52:04.444',NULL,'7888631140367998976',NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjUwMzIzMjQsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.WgkhG-uGxde0JQg-E6Bdz7irZqCabFiZvElNdDAIyVo','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-06-30 11:52:04.433'),('8098425252130881536','2021-06-30 11:54:14.841',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjUwMzI0NTQsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.W3_b_oUpP8sC_9_ySKpRWLvlVojZ3_jHP0vU2OA2LXc','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-06-30 11:54:14.840'),('8098425307751546880','2021-06-30 11:54:28.102',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjUwMzI0NjgsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.kCtMiC3UjwuLbru9wwJ8Z3MtE-NLRiGI4OiPQDD_1do','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-06-30 11:54:28.101'),('8098425546914955264','2021-06-30 11:55:25.123',NULL,NULL,NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjUwMzI1MjUsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.nakH4Jab-qKp7TihG6WH7_6j3KpOdvE1AyHbqLSjrOQ','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-06-30 11:55:25.122'),('8099504276995391488','2021-07-03 11:21:54.427',NULL,'7888631140367998976',NULL,'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2MjUyODk3MTQsInVzZXJJZCI6Ijc4ODg2MzExNDAzNjc5OTg5NzYiLCJ1c2VybmFtZSI6ImFkbWluIn0.qX0VQ8xZtlCt5bUKi7mJwNIaPe-qk360ZOYPOvjJZk0','7888631140367998976',NULL,'169.254.172.222',NULL,'2021-07-03 11:21:54.415');
+/*!40000 ALTER TABLE `online_log` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `sys_category`
 --
 
 DROP TABLE IF EXISTS `sys_category`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_category` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -114,7 +147,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_dept`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_dept` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -148,7 +181,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_dict_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_dict_data` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -182,7 +215,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_dict_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_dict_type` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -213,7 +246,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_notice`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_notice` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -250,7 +283,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_operation_log`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_operation_log` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -290,7 +323,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_permission`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_permission` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -330,7 +363,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_role`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_role` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -362,7 +395,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_role_permission_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_role_permission_mapping` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -390,7 +423,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_user`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_user` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -432,7 +465,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `sys_user_role_mapping`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sys_user_role_mapping` (
   `id` varchar(40) NOT NULL,
   `create_time` datetime(3) DEFAULT NULL,
@@ -467,4 +500,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-05-13 15:02:12
+-- Dump completed on 2021-07-12 21:09:31
