@@ -2,9 +2,10 @@ package com.jjh.framework.aspect;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.ServletUtil;
-import com.jjh.common.util.request.GetRequestJsonUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jjh.common.constant.BaseConstants;
+import com.jjh.common.util.request.GetRequestJsonUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,11 +13,13 @@ import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.UUID;
 
 /**
  * 日志切面类
@@ -46,6 +49,10 @@ public class WebLogAspect {
 
     }
 
+    /**
+     * slf4j的MDC实现日志全局跟踪标识
+     * https://blog.csdn.net/abel_new/article/details/119837392
+     */
     @Before("webLog()")
     public void doBefore(JoinPoint joinPoint) throws Throwable{
 
@@ -56,6 +63,8 @@ public class WebLogAspect {
         logger.info("[WEB] [IP] {}", ServletUtil.getClientIP(request, null));
         // 参数打印
         logger.info("[WEB] [Request Param] {}", StrUtil.removeAllLineBreaks(GetRequestJsonUtils.getRequestJsonString(request)));
+        // 全局跟踪标识
+        MDC.put(BaseConstants.TRACE_ID, UUID.randomUUID().toString());
     }
 
     @AfterReturning(returning = "returnValue",pointcut = "webLog()")

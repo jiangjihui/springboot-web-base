@@ -34,4 +34,7 @@ public class BaseConstants {
     //按钮权限
     public static final String PERMISSION_MENU_TYPE_BUTTON = "2";
 
+    //按钮权限
+    public static final String TRACE_ID = "TRACE_ID";
+
 }

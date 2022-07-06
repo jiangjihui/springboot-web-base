@@ -9,6 +9,7 @@ import com.jjh.common.exception.BusinessException;
 import com.jjh.common.util.IdGenerateHelper;
 import com.jjh.common.util.PojoUtils;
 import com.jjh.common.web.form.PageRequestForm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +22,7 @@ import java.util.List;
  * @author jjh
  * @date 2020/02/16
  */
+@Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
@@ -36,6 +38,7 @@ public class ArticleServiceImpl implements ArticleService {
      */
     @Override
     public List<Article> list(PageRequestForm<ArticleQueryListForm> form) {
+        log.info("traceId链路测试");
         return articleMapper.selectList(form.pageWrapperQuerySupport());
     }
 
