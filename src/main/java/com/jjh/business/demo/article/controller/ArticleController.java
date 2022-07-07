@@ -3,6 +3,7 @@ package com.jjh.business.demo.article.controller;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
+import com.jjh.business.demo.article.controller.resp.ArticleListResp;
 import com.jjh.business.demo.article.mapper.ArticleMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.business.demo.article.service.ArticleService;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,9 +50,18 @@ public class ArticleController extends BaseController {
      */
     @ApiOperation("文章列表")
     @PostMapping("/list")
-    public SimpleResponseForm<PageResponseForm<Article>> list(@RequestBody PageRequestForm<ArticleQueryListForm> form) {
+    public SimpleResponseForm<PageResponseForm<ArticleListResp>> list(@RequestBody PageRequestForm<ArticleQueryListForm> form) {
         List<Article> list = articleService.list(form);
-        return page(form, list);
+        ArrayList<ArticleListResp> resp = new ArrayList<>();
+        list.stream().forEach(article -> {
+            resp.add(
+                    ArticleListResp.builder()
+                     .id(article.getId())
+                    .name(article.getName())
+                    .content(article.getContent()).build()
+            );
+        });
+        return page(form, resp);
     }
 
     /**
