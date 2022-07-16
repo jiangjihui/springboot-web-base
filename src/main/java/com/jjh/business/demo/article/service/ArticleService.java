@@ -3,6 +3,7 @@ package com.jjh.business.demo.article.service;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.common.web.form.PageRequestForm;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -52,4 +53,10 @@ public interface ArticleService {
     @Transactional(rollbackFor = Exception.class)
     boolean del(String ids);
 
+    void asyncLog();
+
+    @Async
+    void doAsync();
+
+    List<Object> dynamicSqlQuery(String methodName);
 }

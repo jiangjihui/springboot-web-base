@@ -139,4 +139,18 @@ public class ArticleController extends BaseController {
     public SimpleResponseForm<Article> selectOne() {
         return success(articleMapper.selectOneObject());
     }
+
+
+    @ApiOperation("异步消息测试")
+    @GetMapping("/async_log")
+    public SimpleResponseForm<String> asyncLog() {
+        articleService.asyncLog();
+        return new SimpleResponseForm<>();
+    }
+
+    @ApiOperation("未定义的动态SQL查询")
+    @GetMapping("/dynamic_sql_query")
+    public SimpleResponseForm<List<Object>> dynamicSqlQuery(String methodName) {
+        return new SimpleResponseForm<>(articleService.dynamicSqlQuery(methodName));
+    }
 }

@@ -919,9 +919,10 @@ public class ExcelUtil<T>
         try
         {
             Cell cell = row.getCell(column);
+            CellType cellType = cell.getCellType();
             if (cell != null)
             {
-                if (cell.getCellTypeEnum() == CellType.NUMERIC || cell.getCellTypeEnum() == CellType.FORMULA)
+                if (cellType == CellType.NUMERIC || cellType == CellType.FORMULA)
                 {
                     val = cell.getNumericCellValue();
                     if (org.apache.poi.hssf.usermodel.HSSFDateUtil.isCellDateFormatted(cell))
@@ -940,15 +941,15 @@ public class ExcelUtil<T>
                         }
                     }
                 }
-                else if (cell.getCellTypeEnum() == CellType.STRING)
+                else if (cellType == CellType.STRING)
                 {
                     val = cell.getStringCellValue();
                 }
-                else if (cell.getCellTypeEnum() == CellType.BOOLEAN)
+                else if (cellType == CellType.BOOLEAN)
                 {
                     val = cell.getBooleanCellValue();
                 }
-                else if (cell.getCellTypeEnum() == CellType.ERROR)
+                else if (cellType == CellType.ERROR)
                 {
                     val = cell.getErrorCellValue();
                 }
