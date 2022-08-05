@@ -59,4 +59,6 @@ public interface ArticleService {
     void doAsync();
 
     List<Object> dynamicSqlQuery(String methodName);
+
+    public void multThread();
 }

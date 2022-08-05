@@ -1,6 +1,8 @@
 package com.jjh.business.demo.article.service.impl;
 
 import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
 import com.jjh.business.demo.article.mapper.ArticleMapper;
@@ -20,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 文章 服务层实现
@@ -123,8 +127,85 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Object> dynamicSqlQuery(String methodName) {
         String mapperClassStr = "com.jjh.business.demo.article.mapper.ArticleMapper";
         String statement = StringUtils.join(mapperClassStr, ".", methodName);
-        return sqlSession.selectList(statement);
-        // return sqlSessionTemplate.selectList(statement);
+        // return sqlSession.selectList(statement);
+        return sqlSessionTemplate.selectList(statement);
     }
 
+    /**
+     * 多线程并行
+     */
+    @Override
+    public void multThread() {
+        int threadSize = 5;
+        ThreadPoolExecutor executor = ThreadUtil.newExecutor(threadSize, threadSize);
+        CountDownLatch latch = new CountDownLatch(threadSize);
+
+        try {
+            for (int i = 0; i < threadSize; i++) {
+                int finalI = i;
+                executor.submit(new RunTask(latch, () -> {
+                    doWrite(finalI);
+                }));
+            }
+            latch.await();
+        } catch (Exception e) {
+            executor.shutdown();
+        }
+
+        log.info("multThread end.");
+
+    }
+
+    static class RunTask implements Runnable{
+
+        private Runnable task;
+        private CountDownLatch latch;
+
+        public RunTask(CountDownLatch latch, Runnable task) {
+            this.task = task;
+            this.latch = latch;
+        }
+
+        @Override
+        public void run() {
+            try {
+                task.run();
+            }
+            finally {
+                latch.countDown();
+            }
+        }
+    }
+
+    public void doRead(int currentNo, int subNo)  {
+        log.info("doRead start. currentNo: {} subNo: {}", currentNo, subNo);
+        try {
+            int i = RandomUtil.randomInt(100);
+            Thread.sleep(1000 + i);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        log.info("doRead end. currentNo: {} subNo: {}", currentNo, subNo);
+    }
+
+    public void doWrite(int currentNo) {
+        log.info("doWrite start. currentNo: {}", currentNo);
+        int subSize = 3;
+        ThreadPoolExecutor executor = ThreadUtil.newExecutor(subSize, subSize);
+        CountDownLatch latch = new CountDownLatch(subSize);
+
+        try {
+            for (int i = 0; i < subSize; i++) {
+                int subNo = i;
+                executor.submit(new RunTask(latch, () -> {
+                    doRead(currentNo, subNo);
+                }));
+            }
+            latch.await();
+        } catch (Exception e) {
+            executor.shutdown();
+        }
+
+        log.info("doWrite end. currentNo: {}", currentNo);
+    }
 }

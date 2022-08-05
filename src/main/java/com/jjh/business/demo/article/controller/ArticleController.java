@@ -153,4 +153,11 @@ public class ArticleController extends BaseController {
     public SimpleResponseForm<List<Object>> dynamicSqlQuery(String methodName) {
         return new SimpleResponseForm<>(articleService.dynamicSqlQuery(methodName));
     }
+
+    @ApiOperation("多线程并行")
+    @GetMapping("/mult_thread")
+    public SimpleResponseForm<String> multThread() {
+        articleService.multThread();
+        return new SimpleResponseForm<>("OK");
+    }
 }
