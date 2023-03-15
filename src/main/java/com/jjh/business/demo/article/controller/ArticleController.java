@@ -160,4 +160,11 @@ public class ArticleController extends BaseController {
         articleService.multThread();
         return new SimpleResponseForm<>("OK");
     }
+
+    @ApiOperation("游标查询数据")
+    @GetMapping("/cursor_list")
+    public SimpleResponseForm<String> cursorList() {
+        int result = articleService.cursorDeal(100);
+        return new SimpleResponseForm<>(String.valueOf(result));
+    }
 }

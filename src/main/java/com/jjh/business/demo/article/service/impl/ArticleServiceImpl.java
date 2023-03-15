@@ -5,6 +5,7 @@ import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
+import com.jjh.business.demo.article.manager.ArticleManager;
 import com.jjh.business.demo.article.mapper.ArticleMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.business.demo.article.service.ArticleService;
@@ -37,6 +38,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Resource
     private ArticleMapper articleMapper;
+    @Resource
+    private ArticleManager articleManager;
 
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
@@ -155,7 +158,6 @@ public class ArticleServiceImpl implements ArticleService {
         log.info("multThread end.");
 
     }
-
     static class RunTask implements Runnable{
 
         private Runnable task;
@@ -208,4 +210,17 @@ public class ArticleServiceImpl implements ArticleService {
 
         log.info("doWrite end. currentNo: {}", currentNo);
     }
+
+    /**
+     * 游标处理数据
+     */
+    @Override
+    public int cursorDeal(int batchSize) {
+        Article article = new Article();
+        article.setStatus(1);
+        return articleManager.cursorList(batchSize, article, list -> {
+            log.info("batch get list, size: {}", list.size());
+        });
+    }
+
 }

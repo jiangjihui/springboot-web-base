@@ -8,4 +8,12 @@
         select * from article limit 1
     </select>
 
+    <select id="cursorList" resultType="com.jjh.business.demo.article.model.Article" resultSetType="FORWARD_ONLY" fetchSize="-2147483648">
+        select id, name, status, content, remark from article
+        <where>
+            <if test="status != null">and status = #{status}</if>
+        </where>
+    </select>
+
+
 </mapper>

@@ -61,4 +61,6 @@ public interface ArticleService {
     List<Object> dynamicSqlQuery(String methodName);
 
     public void multThread();
+
+    int cursorDeal(int batchSize);
 }
