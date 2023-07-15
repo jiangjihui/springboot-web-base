@@ -199,13 +199,6 @@
             <version>31.1-jre</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.jjh</groupId>
-            <artifactId>nexus-release</artifactId>
-            <version>1.1-RELEASE</version>
-        </dependency>
-
-
     </dependencies>
 
     <build>
@@ -247,12 +240,5 @@
             </resource>
         </resources>
     </build>
-    <repositories>
-        <repository>
-            <id>test</id>
-            <url>http://192.168.161.10:11050/repository/test-release/</url>
-        </repository>
-    </repositories>
-
 
 </project>
