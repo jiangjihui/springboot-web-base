@@ -1,6 +1,7 @@
 package com.jjh.business.system.support.controller;
 
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.jjh.business.system.support.model.SysDictData;
 import com.jjh.business.system.support.service.SysDictDataService;
 import com.jjh.common.web.controller.BaseController;
@@ -8,16 +9,20 @@ import com.jjh.common.web.form.PageRequestForm;
 import com.jjh.common.web.form.PageResponseForm;
 import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.plugin.excel.ExcelUtil;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +30,7 @@ import java.util.List;
  * @author jjh
  * @date 2019/12/09
 */
-@Api(tags = "[a1070]字典数据管理")
+@Tag(name = "[a1070]字典数据管理")
 @RestController
 @RequestMapping("/system/support/sys_dict_data")
 public class SysDictDataController extends BaseController {
@@ -37,7 +42,7 @@ public class SysDictDataController extends BaseController {
     /**
      * 字典数据列表
      */
-    @ApiOperation("字典数据列表")
+    @Operation(summary = "字典数据列表")
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<SysDictData>> list(@RequestBody PageRequestForm<SysDictData> form) {
         List<SysDictData> list = sysDictDataService.list(form);
@@ -47,7 +52,7 @@ public class SysDictDataController extends BaseController {
     /**
      * 新增字典数据
      */
-    @ApiOperation("新增字典数据")
+    @Operation(summary = "新增字典数据")
     @ApiOperationSupport(ignoreParameters = {"id","createTime","updateTime","createBy","updateBy"})
     @PostMapping("/add")
     public SimpleResponseForm<SysDictData> add(HttpServletRequest request, @Valid @RequestBody SysDictData entity) {
@@ -58,7 +63,7 @@ public class SysDictDataController extends BaseController {
     /**
      * 更新字典数据
      */
-    @ApiOperation("更新字典数据")
+    @Operation(summary = "更新字典数据")
     @ApiOperationSupport(ignoreParameters = {"createTime","updateTime","createBy","updateBy"})
     @PostMapping("/update")
     public SimpleResponseForm<SysDictData> update(HttpServletRequest request, @Valid @RequestBody SysDictData entity) {
@@ -69,7 +74,7 @@ public class SysDictDataController extends BaseController {
     /**
      * 删除字典数据
      */
-    @ApiOperation("删除字典数据")
+    @Operation(summary = "删除字典数据")
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
         sysDictDataService.del(ids);
@@ -79,9 +84,9 @@ public class SysDictDataController extends BaseController {
     /**
      * 根据字典类型查询字典数据信息
      */
-    @ApiOperation("根据字典类型查询字典数据信息")
+    @Operation(summary = "根据字典类型查询字典数据信息")
     @GetMapping("/list_by_dict_type")
-    @ApiImplicitParam(name = "dictType", value = "字典类型（码值）", required = true, dataType = "String", paramType = "query")
+    @Parameter(description = "dictType", name = "字典类型（码值）", required = true, in = ParameterIn.HEADER)
     public SimpleResponseForm<List<SysDictData>> listByDictType(String dictType) {
         return success(sysDictDataService.listByDictType(dictType));
     }
@@ -90,7 +95,7 @@ public class SysDictDataController extends BaseController {
      * 字典数据导入模板
      * @return
      */
-    @ApiOperation(value = "字典数据导入模板")
+    @Operation(summary = "字典数据导入模板")
     @GetMapping("/import_template")
     public SimpleResponseForm<String> importTemplate() {
         ExcelUtil<SysDictData> util = new ExcelUtil<>(SysDictData.class);
@@ -102,7 +107,7 @@ public class SysDictDataController extends BaseController {
      * @param form 分页请求参数
      * @return 导出文件
      */
-    @ApiOperation("字典数据导出")
+    @Operation(summary = "字典数据导出")
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<SysDictData> form) {
         List<SysDictData> list = sysDictDataService.list(form);
@@ -114,7 +119,7 @@ public class SysDictDataController extends BaseController {
      * 字典数据导入
      * @return
      */
-    @ApiOperation(value = "字典数据导入")
+    @Operation(summary = "字典数据导入")
     @PostMapping("/import_data")
     public SimpleResponseForm<String> importData(MultipartFile file, boolean updateSupport) {
         if (file != null) {

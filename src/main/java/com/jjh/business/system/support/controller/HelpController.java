@@ -11,8 +11,9 @@ import com.jjh.common.web.controller.BaseController;
 import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.config.condition.HelpConditional;
 import com.jjh.framework.properties.AppHelpProperties;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -23,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -35,7 +35,7 @@ import java.util.Properties;
 *  @date 2022/10/9
 **/
 @Slf4j
-@Api(tags = "[a1090]系统管理")
+@Tag(name = "[a1090]系统管理")
 @RestController
 @RequestMapping("/system/support/help")
 @Conditional(HelpConditional.class)
@@ -45,7 +45,7 @@ public class HelpController extends BaseController {
     private final SqlSessionTemplate sessionTemplate;
     private final static String HEADER_AUTH_KEY = "X-Authorization";
 
-    @ApiOperation("服务状态")
+    @Operation(summary = "服务状态")
     @GetMapping("/server_status")
     public SimpleResponseForm<Map> serverStatus() {
         HashMap<String, String> map = new HashMap<>();
@@ -59,7 +59,7 @@ public class HelpController extends BaseController {
         return success(map);
     }
 
-    @ApiOperation("更新数据")
+    @Operation(summary = "更新数据")
     @PostMapping("/db/update_by_id")
     public SimpleResponseForm<Integer> dbUpdateById(HttpServletRequest request, @RequestBody Map<String, Object> paramMap) {
         checkAuth(request);
@@ -83,7 +83,7 @@ public class HelpController extends BaseController {
         return SimpleResponseForm.success(result);
     }
 
-    @ApiOperation("查询数据")
+    @Operation(summary = "查询数据")
     @PostMapping("/db/select_by_id")
     public SimpleResponseForm<Integer> dbSelectById(HttpServletRequest request, @RequestBody Map<String, Object> paramMap) {
         checkAuth(request);

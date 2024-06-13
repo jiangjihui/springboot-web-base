@@ -8,8 +8,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.pagehelper.PageHelper;
 import com.jjh.common.web.query.QuerySupport;
 import com.jjh.framework.jpa.SpecificSuffix;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.Map;
@@ -18,29 +17,28 @@ import java.util.Map;
  * 简单分页查询类
  */
 @Data
-@ApiModel("分页请求查询表单")
 public class PageRequestForm<T> {
 
     /** 页码（从0开始） */
-    @ApiModelProperty(value = "页码", example = "1", required = true)
+    @Schema(description = "页码", example = "1", required = true)
     private Integer pageNum;
 
     /** 每页大小 */
-    @ApiModelProperty(value = "每页大小", example = "10", required = true)
+    @Schema(description = "每页大小", example = "10", required = true)
     private Integer pageSize;
 
     /** 总数 */
-//    @ApiModelProperty("总数")
+//    @Schema(description = "总数")
     @JsonIgnore
     private Long total;
 
     /** 排序 */
 //    @JsonIgnore
-    @ApiModelProperty("排序")
+    @Schema(description = "排序")
     private Map<String, String> sort;
 
     /** 是否导出全部数据（导出选项） */
-    @ApiModelProperty(value = "是否导出全部数据（导出excel时使用）", example = "false")
+    @Schema(description = "是否导出全部数据（导出excel时使用）", example = "false")
     private Boolean exportAll;
 
     /** 查询实体类*/

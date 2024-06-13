@@ -19,7 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.jjh.framework.plugin.excel.ExcelUtil;
 #end
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ import java.util.List;
  * @author ${author}
  * @date ${datetime}
 */
-@Api(tags = "${tableComment}管理")
+@Tag(name = "${tableComment}管理")
 @RestController
 @RequestMapping("/${moduleName}/${classname}")
 public class ${ClassName}Controller extends BaseController {
@@ -40,7 +40,7 @@ public class ${ClassName}Controller extends BaseController {
     /**
      * ${tableComment}列表
      */
-    @ApiOperation("${tableComment}列表")
+    @Operation(summary = "${tableComment}列表")
     @ApiOperationSupport(order = 10)
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<${classEntity}>> list(@RequestBody PageRequestForm<${classEntity}> form) {
@@ -52,7 +52,7 @@ public class ${ClassName}Controller extends BaseController {
      * 新增${tableComment}
      */
     @Log(title = "新增${tableComment}", businessType = BusinessType.INSERT)
-    @ApiOperation("新增${tableComment}")
+    @Operation(summary = "新增${tableComment}")
     @ApiOperationSupport(order = 20, ignoreParameters = {"id","createTime","updateTime","createBy","updateBy"})
     @PostMapping("/add")
     public SimpleResponseForm<${classEntity}> add(@Valid @RequestBody ${classEntity} entity) {
@@ -64,7 +64,7 @@ public class ${ClassName}Controller extends BaseController {
      * 更新${tableComment}
      */
     @Log(title = "更新${tableComment}", businessType = BusinessType.UPDATE)
-    @ApiOperation("更新${tableComment}")
+    @Operation(summary = "更新${tableComment}")
     @ApiOperationSupport(order = 30, ignoreParameters = {"createTime","updateTime","createBy","updateBy"})
     @PostMapping("/update")
     public SimpleResponseForm<${classEntity}> update(@Valid @RequestBody ${classEntity} entity) {
@@ -76,7 +76,7 @@ public class ${ClassName}Controller extends BaseController {
      * 删除${tableComment}
      */
     @Log(title = "删除${tableComment}", businessType = BusinessType.DELETE)
-    @ApiOperation("删除${tableComment}")
+    @Operation(summary = "删除${tableComment}")
     @ApiOperationSupport(order = 40)
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
@@ -89,7 +89,7 @@ public class ${ClassName}Controller extends BaseController {
      * ${tableComment}导入模板
      * @return
      */
-    @ApiOperation(value = "${tableComment}导入模板")
+    @Operation(summary = "${tableComment}导入模板")
     @ApiOperationSupport(order = 50)
     @GetMapping("/import_template")
     public SimpleResponseForm<String> importTemplate() {
@@ -102,7 +102,7 @@ public class ${ClassName}Controller extends BaseController {
      * @return
      */
     @Log(title = "${tableComment}导入", businessType = BusinessType.IMPORT)
-    @ApiOperation(value = "${tableComment}导入")
+    @Operation(summary = "${tableComment}导入")
     @ApiOperationSupport(order = 60)
     @PostMapping("/import_data")
     public SimpleResponseForm<String> importData(MultipartFile file, boolean updateSupport) {
@@ -121,7 +121,7 @@ public class ${ClassName}Controller extends BaseController {
      * @return 导出文件
      */
     @Log(title = "${tableComment}导出", businessType = BusinessType.EXPORT)
-    @ApiOperation("${tableComment}导出")
+    @Operation(summary = "${tableComment}导出")
     @ApiOperationSupport(order = 70)
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<${classEntity}> form) {

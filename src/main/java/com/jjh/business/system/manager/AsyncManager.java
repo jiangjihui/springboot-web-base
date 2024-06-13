@@ -21,13 +21,13 @@ public class AsyncManager {
      */
     private final int OPERATE_DELAY_TIME = 10;
 
-    private ScheduledExecutorService executor = SpringUtil.getBean("scheduledExecutorService");
+    private final ScheduledExecutorService executor = SpringUtil.getBean("scheduledExecutorService");
 
 
     /**
      * 单例模式
      */
-    private static AsyncManager me = new AsyncManager();
+    private static final AsyncManager me = new AsyncManager();
 
     public static AsyncManager me()
     {

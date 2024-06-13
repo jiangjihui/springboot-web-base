@@ -14,14 +14,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.5</version>
+        <version>3.0.2</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
     </properties>
 
     <dependencies>
@@ -49,14 +49,14 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.3</version>
+            <version>3.5.7</version>
         </dependency>
 
         <!-- MyBatis分页插件-pagehelper  -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.4.6</version>
+            <version>2.1.0</version>
             <exclusions>
                 <exclusion>
                     <artifactId>mybatis</artifactId>
@@ -69,27 +69,27 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.79</version>
+            <version>2.0.51</version>
         </dependency>
         <!--在Spring Boot项目中轻松集成Druid数据库连接池和监控 https://github.com/alibaba/druid/tree/master/druid-spring-boot-starter-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.2.8</version>
+            <version>1.2.23</version>
         </dependency>
 
         <!--JWT-->
         <dependency>
             <groupId>com.auth0</groupId>
             <artifactId>java-jwt</artifactId>
-            <version>3.18.1</version>
+            <version>4.4.0</version>
         </dependency>
 
         <!--MySQL 驱动-->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.25</version>
+            <version>8.0.33</version>
         </dependency>
 
         <!--工具类-->
@@ -103,7 +103,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.7.19</version>
+            <version>5.8.28</version>
         </dependency>
 
         <!--Redis-->
@@ -117,11 +117,42 @@
             <artifactId>commons-pool2</artifactId>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
+        <!-- shiro -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.7.1</version>
+            <classifier>jakarta</classifier>
+            <version>1.12.0</version>
+            <!-- 排除仍使用了javax.servlet的依赖 -->
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-web</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- 引入适配jakarta的依赖包 -->
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-core</artifactId>
+            <classifier>jakarta</classifier>
+            <version>1.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-web</artifactId>
+            <classifier>jakarta</classifier>
+            <version>1.12.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.shiro</groupId>
+                    <artifactId>shiro-core</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <!-- shiro-redis -->
         <dependency>
@@ -137,16 +168,11 @@
         </dependency>
 
         <!--Swagger API 依赖-->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>2.10.5</version>
-        </dependency>
         <!--Swagger UI-->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
-            <version>2.0.9</version>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.5.0</version>
         </dependency>
 
         <dependency>
@@ -165,7 +191,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.0.0</version>
+            <version>5.2.5</version>
         </dependency>
 
         <!--工具包-异步线程池使用-->
@@ -178,7 +204,7 @@
         <dependency>
             <groupId>com.github.anji-plus</groupId>
             <artifactId>captcha-spring-boot-starter</artifactId>
-            <version>1.2.7</version>
+            <version>1.2.4</version>
         </dependency>
 
         <dependency>
@@ -190,13 +216,13 @@
         <dependency>
             <groupId>org.codehaus.groovy</groupId>
             <artifactId>groovy</artifactId>
-            <version>3.0.15</version>
+            <version>3.0.21</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>31.1-jre</version>
+            <version>33.2.1-jre</version>
         </dependency>
 
     </dependencies>

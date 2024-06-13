@@ -1,9 +1,7 @@
 package com.jjh.common.web.form;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-
-import javax.validation.constraints.NotBlank;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 查询表单
@@ -11,11 +9,10 @@ import javax.validation.constraints.NotBlank;
  * @author jjh
  * @date 2019/6/1
  **/
-@ApiModel("查询表单")
 public class SimpleForm {
 
     @NotBlank(message = "ID不能为空")
-    @ApiModelProperty(value = "ID", required = true)
+    @Schema(description = "ID", required = true)
     private String id;
 
     public String getId() {

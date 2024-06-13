@@ -7,10 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
@@ -64,7 +64,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         BodyReaderHttpServletRequestWrapper requestWrapper = null;
         if(request instanceof HttpServletRequest) {
             //request解决getInputStream读取一次问题（处理请求参数打印）
-            requestWrapper = new BodyReaderHttpServletRequestWrapper((HttpServletRequest) request);
+            requestWrapper = new BodyReaderHttpServletRequestWrapper(request);
         }
         //获取请求中的流，将取出来的字符串，再次转换成流，然后把它放入到新request对象中。
         // 在chain.doFiler方法中传递新的request对象

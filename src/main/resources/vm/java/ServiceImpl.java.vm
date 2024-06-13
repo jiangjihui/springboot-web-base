@@ -11,7 +11,7 @@ import com.jjh.common.web.form.PageRequestForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 
 /**
@@ -97,7 +97,7 @@ public class ${ClassName}ServiceImpl implements ${ClassName}Service {
         if (CollectionUtil.isEmpty(list)) {
             throw new BusinessException("待导入数据为空");
         }
-        for (${classEntity} entity : list) {
+        for (${classEntity} list) {
             ${classEntity} oldEntity = ${className}Mapper.selectById(entity.getId());
             if (oldEntity != null) {
                 if (Boolean.TRUE.equals(updateSupport)) {

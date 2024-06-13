@@ -1,11 +1,12 @@
 package com.jjh.framework.aspect;
 
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jjh.common.constant.BaseConstants;
 import com.jjh.common.util.request.GetRequestJsonUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -18,7 +19,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.UUID;
 
 /**
@@ -32,7 +32,7 @@ public class WebLogAspect {
 
     Logger logger = LoggerFactory.getLogger(getClass());
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     /** 响应结果打印：最大打印长度*/
     private final static int MAX_LOG_RESPONSE_LENGTH = 500;
@@ -58,11 +58,11 @@ public class WebLogAspect {
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        logger.info("[WEB] [URL] {}", request.getRequestURI().toString());
-        logger.info("[WEB] [HTTP_METHOD] {}", request.getMethod());
-        logger.info("[WEB] [IP] {}", ServletUtil.getClientIP(request, null));
-        // 参数打印
-        logger.info("[WEB] [Request Param] {}", StrUtil.removeAllLineBreaks(GetRequestJsonUtils.getRequestJsonString(request)));
+        logger.info("[WEB] {} {} {} [Request Param] {}",
+                request.getRequestURI(),
+                request.getMethod(),
+                JakartaServletUtil.getClientIP(request, null),
+                StrUtil.removeAllLineBreaks(GetRequestJsonUtils.getRequestJsonString(request)));
         // 全局跟踪标识
         MDC.put(BaseConstants.TRACE_ID, UUID.randomUUID().toString());
     }

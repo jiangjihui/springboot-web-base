@@ -1,10 +1,8 @@
 package com.jjh.business.common.gen.controller.form;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
 
 /**
  * 生成指定路径下的代码 表单
@@ -15,7 +13,6 @@ import javax.validation.constraints.NotBlank;
  * @author jjh
  * @date 2019/11/20
  **/
-@ApiModel("生成指定路径代码 表单")
 @Data
 public class GenTargetPathForm {
 
@@ -23,27 +20,27 @@ public class GenTargetPathForm {
      * 代码绝对路径（包含到model包名）
      */
     @NotBlank(message = "代码绝对路径")
-    @ApiModelProperty(value = "代码绝对路径（包含到model包名）", example = "D:\\Temp\\IDEA\\ecom_analysis_backend\\src\\main\\java\\com\\jjh\\business\\system\\support\\model")
+    @Schema(description = "代码绝对路径（包含到model包名）", example = "D:\\Temp\\IDEA\\ecom_analysis_backend\\src\\main\\java\\com\\jjh\\business\\system\\support\\model")
     private String packagePath;
 
     /** 作者（比如：jjh）*/
     @NotBlank(message = "作者不能为空")
-    @ApiModelProperty("作者")
+    @Schema(description = "作者")
     private String author;
 
     /** 目标文件类型*/
-    @ApiModelProperty(value = "目标文件类型（,号分隔；为空时默认生成全部目标文件类型）", example = "Service,Controller")
+    @Schema(description = "目标文件类型（,号分隔；为空时默认生成全部目标文件类型）", example = "Service,Controller")
     private String targetFile;
 
     /** 包含项*/
-    @ApiModelProperty(value = "包含项（为空时默认包含全部）", example = "SysUse")
+    @Schema(description = "包含项（为空时默认包含全部）", example = "SysUse")
     private String includeEntity;
 
     /** 排除项*/
-    @ApiModelProperty(value = "排除项（为空时则不存在排除项）", example = "UserInfo,RoInfo")
+    @Schema(description = "排除项（为空时则不存在排除项）", example = "UserInfo,RoInfo")
     private String excludeEntity;
 
     /** 是否生成导入导出代码*/
-    @ApiModelProperty(value = "是否生成导入导出代码", example = "false")
+    @Schema(description = "是否生成导入导出代码", example = "false")
     private Boolean importAndExport;
 }

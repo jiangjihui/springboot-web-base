@@ -48,7 +48,7 @@ public class PojoUtils {
             Object srcValue = src.getPropertyValue(pd.getName());
             if (srcValue == null) {
                 emptyNames.add(pd.getName());
-            } else if ((srcValue instanceof String) && "".equals((String) srcValue)) {
+            } else if ((srcValue instanceof String) && "".equals(srcValue)) {
                 emptyNames.add(pd.getName());
             }
         }

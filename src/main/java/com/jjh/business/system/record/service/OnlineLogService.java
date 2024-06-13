@@ -5,7 +5,7 @@ import com.jjh.business.system.user.model.SysUser;
 import com.jjh.common.web.form.PageRequestForm;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**

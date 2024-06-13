@@ -1,29 +1,27 @@
 package com.jjh.common.web.form;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.io.Serializable;
 
 /**
  * 接口调用返回基础数据类
  */
-@ApiModel("响应对象")
 public class SimpleResponseForm<T> implements Serializable {
 
     private static final int SUCCESS_CODE = 0;
     private static final String SUCCESS_MESSAGE = "成功";
 
-    @ApiModelProperty(value = "成功标识；true：成功；false:失败", required = true)
+    @Schema(description = "成功标识；true：成功；false:失败", required = true)
     private boolean success;
 
-    @ApiModelProperty(value = "返回状态码；0:成功；其他状态码:失败", required = true)
+    @Schema(description = "返回状态码；0:成功；其他状态码:失败", required = true)
     private int code = 0;
 
-    @ApiModelProperty(value = "结果集")
+    @Schema(description = "结果集")
     private T result;
 
-    @ApiModelProperty(value = "描述信息")
+    @Schema(description = "描述信息")
     private String message;
 
     public boolean isSuccess() {

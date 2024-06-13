@@ -1,7 +1,6 @@
 package com.jjh.business.system.support.controller.form;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,14 +9,13 @@ import lombok.Data;
  * @author jjh
  * @date 2020/4/8
  **/
-@ApiModel("系统字典查询表单")
 @Data
 public class SysDictTypeQueryForm {
 
-    @ApiModelProperty("字典分类名称")
+    @Schema(description = "字典分类名称")
     private String name_WithLikeAll;
 
-    @ApiModelProperty("字典分类编号")
+    @Schema(description = "字典分类编号")
     private String code;
 
 }

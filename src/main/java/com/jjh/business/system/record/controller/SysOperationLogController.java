@@ -9,12 +9,16 @@ import com.jjh.common.web.form.PageRequestForm;
 import com.jjh.common.web.form.PageResponseForm;
 import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.plugin.excel.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -23,7 +27,7 @@ import java.util.List;
  * @author jjh
  * @date 2020/04/26
 */
-@Api(tags = "[a4010]操作日志管理")
+@Tag(name = "[a4010]操作日志管理")
 @RestController
 @RequestMapping("/system/record/sys_operation_log")
 public class SysOperationLogController extends BaseController {
@@ -35,7 +39,7 @@ public class SysOperationLogController extends BaseController {
     /**
      * 操作日志列表
      */
-    @ApiOperation("操作日志列表")
+    @Operation(summary = "操作日志列表")
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<SysOperationLog>> list(@RequestBody PageRequestForm<QueryOperationLogForm> form) {
         List<SysOperationLog> list = sysOperationLogService.list(form);
@@ -45,7 +49,7 @@ public class SysOperationLogController extends BaseController {
     /**
      * 新增操作日志
      */
-    @ApiOperation("新增操作日志")
+    @Operation(summary = "新增操作日志")
     @PostMapping("/add")
     public SimpleResponseForm<SysOperationLog> add(@Valid @RequestBody SysOperationLog entity) {
         SysOperationLog result = sysOperationLogService.add(entity);
@@ -55,7 +59,7 @@ public class SysOperationLogController extends BaseController {
     /**
      * 更新操作日志
      */
-    @ApiOperation("更新操作日志")
+    @Operation(summary = "更新操作日志")
     @PostMapping("/update")
     public SimpleResponseForm<SysOperationLog> update(@Valid @RequestBody SysOperationLog entity) {
         SysOperationLog result = sysOperationLogService.update(entity);
@@ -65,7 +69,7 @@ public class SysOperationLogController extends BaseController {
     /**
      * 删除操作日志
      */
-    @ApiOperation("删除操作日志")
+    @Operation(summary = "删除操作日志")
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
         sysOperationLogService.del(ids);
@@ -77,7 +81,7 @@ public class SysOperationLogController extends BaseController {
      * @param form 分页请求参数
      * @return 导出文件
      */
-    @ApiOperation("操作日志导出")
+    @Operation(summary = "操作日志导出")
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<QueryOperationLogForm> form) {
         List<SysOperationLog> list = sysOperationLogService.list(form);

@@ -3,43 +3,43 @@ package com.jjh.framework.jwt;
 import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.jjh.common.web.form.SimpleResponseForm;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
+import org.apache.shiro.web.filter.AccessControlFilter;
 import org.springframework.http.HttpStatus;
 
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
- *  JWT过滤器
- * 因为 JWT 的整合，我们需要自定义自己的过滤器 JWTFilter，JWTFilter 继承了 BasicHttpAuthenticationFilter，并部分原方法进行了重写
- * https://www.jianshu.com/p/3c51832f1051
+ *  整合shiro+jwt
+ *https://zhuanlan.zhihu.com/p/663925382
  *
  * @author jjh
  * @date 2019/11/25
  **/
-public class JwtFilter extends BasicHttpAuthenticationFilter {
-
-
+@Slf4j
+public class JwtFilter extends AccessControlFilter {
 
     /**
-     * 执行登录认证
-     *
-     * @param request
-     * @param response
-     * @param mappedValue
-     * @return
+     * isAccessAllowed()判断是否携带了有效的JwtToken
+     * onAccessDenied()是没有携带JwtToken的时候进行账号密码登录，登录成功允许访问，登录失败拒绝访问
      */
     @Override
     protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        executeLogin(request, response);
-        return true;
+        /**
+         * 1. 返回true，shiro就直接允许访问url
+         * 2. 返回false，shiro才会根据onAccessDenied的方法的返回值决定是否允许访问url
+         *  这里先让它始终返回false来使用onAccessDenied()方法
+         */
+        log.info("isAccessAllowed方法被调用");
+        return false;
     }
 
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) {
+    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) {
         HttpServletRequest httpServletRequest = (HttpServletRequest) request;
         String token = httpServletRequest.getHeader(JWTConstants.X_ACCESS_TOKEN);
         if (StrUtil.isBlank(token)) {
@@ -54,10 +54,6 @@ public class JwtFilter extends BasicHttpAuthenticationFilter {
 
     /**
      * 处理用户token验证失败异常
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {

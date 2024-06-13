@@ -1,5 +1,6 @@
 package com.jjh.business.system.user.controller;
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.jjh.business.system.user.controller.form.QueryUserForm;
 import com.jjh.business.system.user.controller.form.ResetCurrentUserPwdForm;
 import com.jjh.business.system.user.controller.form.ResetPasswordForm;
@@ -12,17 +13,20 @@ import com.jjh.common.web.form.PageResponseForm;
 import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.jwt.JwtUtil;
 import com.jjh.framework.plugin.excel.ExcelUtil;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -31,7 +35,7 @@ import java.util.List;
  * @author jjh
  * @date 2019/11/14
  **/
-@Api(tags = "[a1020]用户管理")
+@Tag(name = "[a1020]用户管理")
 @RestController
 @RequestMapping("/system/user/sys_user")
 public class SysUserController extends BaseController {
@@ -48,7 +52,7 @@ public class SysUserController extends BaseController {
      * @return 用户列表
      */
 //    @RequiresPermissions("system:sysUser:list")
-    @ApiOperation("用户列表")
+    @Operation(summary = "用户列表")
     @ApiOperationSupport(order = 1)
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<SysUser>> list(@RequestBody PageRequestForm<QueryUserForm> form) {
@@ -61,7 +65,7 @@ public class SysUserController extends BaseController {
      * @param entity 用户信息
      * @return 用户信息
      */
-    @ApiOperation(value = "保存用户信息")
+    @Operation(summary = "保存用户信息")
     @ApiOperationSupport(order = 2, ignoreParameters = {"id","createTime","updateTime","createBy","updateBy","roleList"})
     @PostMapping("/add")
     public SimpleResponseForm<String> add(@Valid @RequestBody SysUser entity) {
@@ -74,7 +78,7 @@ public class SysUserController extends BaseController {
      * @param entity 用户信息
      * @return 用户信息
      */
-    @ApiOperation(value = "更新用户信息")
+    @Operation(summary = "更新用户信息")
     @ApiOperationSupport(order = 3, ignoreParameters = {"createTime","updateTime","createBy","updateBy","roleList"})
     @PostMapping("/update")
     public SimpleResponseForm<String> update(@Valid @RequestBody SysUser entity) {
@@ -86,7 +90,7 @@ public class SysUserController extends BaseController {
      * 删除
      * @param ids 待删除的ID数组
      */
-    @ApiOperation(value = "删除用户信息")
+    @Operation(summary = "删除用户信息")
     @ApiOperationSupport(order = 4)
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
@@ -99,7 +103,7 @@ public class SysUserController extends BaseController {
      * @param form
      * @return
      */
-    @ApiOperation(value = "重置密码")
+    @Operation(summary = "重置密码")
     @ApiOperationSupport(order = 5)
     @PostMapping(value = "/reset")
     public SimpleResponseForm<String> reset(@Valid @RequestBody ResetPasswordForm form) {
@@ -112,7 +116,7 @@ public class SysUserController extends BaseController {
      * @param list
      * @return
      */
-    @ApiOperation(value = "冻结/解冻")
+    @Operation(summary = "冻结/解冻")
     @ApiOperationSupport(order = 6)
     @PostMapping("/frozen")
     public SimpleResponseForm<String> frozen(@Valid @RequestBody List<UserFrozenForm> list) {
@@ -125,7 +129,7 @@ public class SysUserController extends BaseController {
      * @param form 分页请求参数
      * @return 导出文件
      */
-    @ApiOperation("用户导出")
+    @Operation(summary = "用户导出")
     @ApiOperationSupport(order = 7)
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<QueryUserForm> form) {
@@ -138,7 +142,7 @@ public class SysUserController extends BaseController {
      * 用户导入模板
      * @return
      */
-    @ApiOperation(value = "用户导入模板")
+    @Operation(summary = "用户导入模板")
     @ApiOperationSupport(order = 8)
     @GetMapping("/import_template")
     public SimpleResponseForm<String> importTemplate() {
@@ -150,7 +154,7 @@ public class SysUserController extends BaseController {
      * 用户数据导入
      * @return
      */
-    @ApiOperation(value = "用户数据导入")
+    @Operation(summary = "用户数据导入")
     @ApiOperationSupport(order = 9)
     @PostMapping("/import_data")
     public SimpleResponseForm<String> importData(MultipartFile file, boolean updateSupport) {
@@ -166,7 +170,7 @@ public class SysUserController extends BaseController {
      * 获取用户信息
      * @param id 用户ID
      */
-    @ApiOperation(value = "获取用户信息")
+    @Operation(summary = "获取用户信息")
     @ApiOperationSupport(order = 10)
     @GetMapping("/info")
     public SimpleResponseForm<SysUser> info(String id) {
@@ -176,7 +180,7 @@ public class SysUserController extends BaseController {
     /**
      * 获取当前用户信息
      */
-    @ApiOperation(value = "获取当前用户信息")
+    @Operation(summary = "获取当前用户信息")
     @ApiOperationSupport(order = 11)
     @GetMapping("/current_user_info")
     public SimpleResponseForm<SysUser> currentUserInfo(){
@@ -186,7 +190,7 @@ public class SysUserController extends BaseController {
     /**
      * 重置当前用户密码
      */
-    @ApiOperation(value = "重置当前用户密码")
+    @Operation(summary = "重置当前用户密码")
     @ApiOperationSupport(order = 12)
     @PostMapping("/reset_current_user")
     public SimpleResponseForm<String> resetCurrentUser(@Valid @RequestBody ResetCurrentUserPwdForm form){
@@ -197,9 +201,9 @@ public class SysUserController extends BaseController {
     /**
      * 根据用户名称获取用户信息
      */
-    @ApiOperation("根据用户名称获取用户列表")
+    @Operation(summary = "根据用户名称获取用户列表")
     @ApiOperationSupport(order = 13)
-    @ApiImplicitParam(name = "name", value = "用户名称")
+    @Parameter(name = "name", description = "用户名称")
     @GetMapping("/find_by_name")
     public SimpleResponseForm<List<SysUser>> findByName(String name) {
         return success(sysUserService.findByName(name));

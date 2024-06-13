@@ -22,7 +22,7 @@ public interface SysRoleService {
      * @param form 查询条件
      * @return 角色实体类集合
      */
-    public List<SysRole> list(PageRequestForm<QueryRoleForm> form);
+    List<SysRole> list(PageRequestForm<QueryRoleForm> form);
 
     /**
      * 新增角色实体类对象
@@ -31,7 +31,7 @@ public interface SysRoleService {
      * @return 角色实体类对象
      */
     @Transactional(rollbackFor = Exception.class)
-    public SysRole add(SysRole entity);
+    SysRole add(SysRole entity);
 
 
     /**
@@ -41,7 +41,7 @@ public interface SysRoleService {
      * @return 角色实体类对象
      */
     @Transactional(rollbackFor = Exception.class)
-    public SysRole update(SysRole entity);
+    SysRole update(SysRole entity);
 
 
     /**
@@ -51,7 +51,7 @@ public interface SysRoleService {
      * @return 结果
      */
     @Transactional(rollbackFor = Exception.class)
-    public boolean del(String ids);
+    boolean del(String ids);
 
     /**
      * 更新用户角色关联

@@ -1,7 +1,6 @@
 package com.jjh.common.web.form;
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 import java.util.List;
 
@@ -11,15 +10,14 @@ import java.util.List;
  * @author jjh
  * @date 2019/6/1
  **/
-@ApiModel("分页对象")
 public class PageResponseForm<T> {
 
     /*总记录数*/
-    @ApiModelProperty("总记录数")
+    @Schema(description = "总记录数")
     private Long total;
 
     /*列表数据*/
-    @ApiModelProperty("列表数据")
+    @Schema(description = "列表数据")
     private List<T> rows;
 
     public PageResponseForm() {

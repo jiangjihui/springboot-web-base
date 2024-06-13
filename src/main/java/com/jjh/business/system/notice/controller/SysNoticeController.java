@@ -11,12 +11,16 @@ import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.aspect.operationlog.BusinessType;
 import com.jjh.framework.aspect.operationlog.Log;
 import com.jjh.framework.plugin.excel.ExcelUtil;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -25,7 +29,7 @@ import java.util.List;
  * @author jjh
  * @date 2020/05/07
 */
-@Api(tags = "[a5010]通知管理")
+@Tag(name = "[a5010]通知管理")
 @RestController
 @RequestMapping("/system/notice/sys_notice")
 public class SysNoticeController extends BaseController {
@@ -37,7 +41,7 @@ public class SysNoticeController extends BaseController {
     /**
      * 通知列表
      */
-    @ApiOperation("通知列表")
+    @Operation(summary = "通知列表")
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<SysNotice>> list(@RequestBody PageRequestForm<QuerySysNoticeForm> form) {
         List<SysNotice> list = sysNoticeService.list(form);
@@ -48,7 +52,7 @@ public class SysNoticeController extends BaseController {
      * 新增通知
      */
     @Log(title = "新增通知", businessType = BusinessType.INSERT)
-    @ApiOperation("新增通知")
+    @Operation(summary = "新增通知")
     @PostMapping("/add")
     public SimpleResponseForm<SysNotice> add(@Valid @RequestBody SysNotice entity) {
         SysNotice result = sysNoticeService.add(entity);
@@ -59,7 +63,7 @@ public class SysNoticeController extends BaseController {
      * 更新通知
      */
     @Log(title = "更新通知", businessType = BusinessType.UPDATE)
-    @ApiOperation("更新通知")
+    @Operation(summary = "更新通知")
     @PostMapping("/update")
     public SimpleResponseForm<SysNotice> update(@Valid @RequestBody SysNotice entity) {
         SysNotice result = sysNoticeService.update(entity);
@@ -70,7 +74,7 @@ public class SysNoticeController extends BaseController {
      * 删除通知
      */
     @Log(title = "删除通知", businessType = BusinessType.DELETE)
-    @ApiOperation("删除通知")
+    @Operation(summary = "删除通知")
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
         sysNoticeService.del(ids);
@@ -83,7 +87,7 @@ public class SysNoticeController extends BaseController {
      * @return 导出文件
      */
     @Log(title = "通知导出", businessType = BusinessType.EXPORT)
-    @ApiOperation("通知导出")
+    @Operation(summary = "通知导出")
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<QuerySysNoticeForm> form) {
         List<SysNotice> list = sysNoticeService.list(form);
@@ -95,7 +99,7 @@ public class SysNoticeController extends BaseController {
     /**
      * 个人通知
      */
-    @ApiOperation("个人通知")
+    @Operation(summary = "个人通知")
     @PostMapping("/list_self")
     public SimpleResponseForm<PageResponseForm<SysNotice>> listSelf(@RequestBody PageRequestForm<SysNotice> form) {
         List<SysNotice> list = sysNoticeService.listSelf(form);
@@ -105,7 +109,7 @@ public class SysNoticeController extends BaseController {
     /**
      * 更新为已读
      */
-    @ApiOperation("更新为已读")
+    @Operation(summary = "更新为已读")
     @PostMapping("/update_read_flag")
     public SimpleResponseForm<String> updateReadFlag(String id) {
         sysNoticeService.updateReadFlag(id);

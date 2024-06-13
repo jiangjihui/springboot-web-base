@@ -3,8 +3,8 @@ package com.jjh.business.common.file.service;
 import com.jjh.business.common.file.model.FileInfo;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 /**
  *  文件服务

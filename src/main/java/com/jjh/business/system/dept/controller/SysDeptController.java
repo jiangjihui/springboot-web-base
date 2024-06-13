@@ -1,6 +1,7 @@
 package com.jjh.business.system.dept.controller;
 
 
+import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import com.jjh.business.system.dept.model.SysDept;
 import com.jjh.business.system.dept.service.SysDeptService;
 import com.jjh.common.web.controller.BaseController;
@@ -10,14 +11,17 @@ import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.aspect.operationlog.BusinessType;
 import com.jjh.framework.aspect.operationlog.Log;
 import com.jjh.framework.plugin.excel.ExcelUtil;
-import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -26,7 +30,7 @@ import java.util.List;
  * @author jjh
  * @date 2020/04/21
 */
-@Api(tags = "[a3010]部门管理")
+@Tag(name = "[a3010]部门管理")
 @RestController
 @RequestMapping("/system/dept/sys_dept")
 public class SysDeptController extends BaseController {
@@ -38,7 +42,7 @@ public class SysDeptController extends BaseController {
     /**
      * 部门列表
      */
-    @ApiOperation("部门列表")
+    @Operation(summary = "部门列表")
     @ApiOperationSupport(order = 1)
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<SysDept>> list(@RequestBody PageRequestForm<SysDept> form) {
@@ -50,7 +54,7 @@ public class SysDeptController extends BaseController {
      * 新增部门
      */
     @Log(title = "新增部门", businessType = BusinessType.INSERT)
-    @ApiOperation("新增部门")
+    @Operation(summary = "新增部门")
     @ApiOperationSupport(order = 2, ignoreParameters = {"id","createTime","updateTime","createBy","updateBy","children"})
     @PostMapping("/add")
     public SimpleResponseForm<SysDept> add(@Valid @RequestBody SysDept entity) {
@@ -61,7 +65,7 @@ public class SysDeptController extends BaseController {
     /**
      * 更新部门
      */
-    @ApiOperation("更新部门")
+    @Operation(summary = "更新部门")
     @ApiOperationSupport(order = 3, ignoreParameters = {"createTime","updateTime","createBy","updateBy","children"})
     @PostMapping("/update")
     public SimpleResponseForm<SysDept> update(@Valid @RequestBody SysDept entity) {
@@ -72,7 +76,7 @@ public class SysDeptController extends BaseController {
     /**
      * 删除部门
      */
-    @ApiOperation("删除部门")
+    @Operation(summary = "删除部门")
     @ApiOperationSupport(order = 4)
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
@@ -84,7 +88,7 @@ public class SysDeptController extends BaseController {
      * 部门导入模板
      * @return
      */
-    @ApiOperation(value = "部门导入模板")
+    @Operation(summary = "部门导入模板")
     @ApiOperationSupport(order = 5)
     @GetMapping("/import_template")
     public SimpleResponseForm<String> importTemplate() {
@@ -96,7 +100,7 @@ public class SysDeptController extends BaseController {
      * 部门导入
      * @return
      */
-    @ApiOperation(value = "部门导入")
+    @Operation(summary = "部门导入")
     @ApiOperationSupport(order = 6)
     @PostMapping("/import_data")
     public SimpleResponseForm<String> importData(MultipartFile file, boolean updateSupport) {
@@ -114,7 +118,7 @@ public class SysDeptController extends BaseController {
      * @param form 分页请求参数
      * @return 导出文件
      */
-    @ApiOperation("部门导出")
+    @Operation(summary = "部门导出")
     @ApiOperationSupport(order = 7)
     @PostMapping("/export")
     public SimpleResponseForm<String> export(@RequestBody PageRequestForm<SysDept> form) {
@@ -126,7 +130,7 @@ public class SysDeptController extends BaseController {
     /**
      * 查询树结构列表（选项列表）
      */
-    @ApiOperation("查询树结构列表（选项列表）")
+    @Operation(summary = "查询树结构列表（选项列表）")
     @ApiOperationSupport(order = 8)
     @GetMapping("/select_tree_list")
     public SimpleResponseForm<List<SysDept>> selectTreeList() {
@@ -136,7 +140,7 @@ public class SysDeptController extends BaseController {
     /**
      * 查询所有树结构列表（管理）
      */
-    @ApiOperation("查询所有树结构列表（管理）")
+    @Operation(summary = "查询所有树结构列表（管理）")
     @ApiOperationSupport(order = 9)
     @PostMapping("/all_tree_list")
     public SimpleResponseForm<List<SysDept>> allTreeList(@RequestBody PageRequestForm<SysDept> form) {
@@ -146,7 +150,7 @@ public class SysDeptController extends BaseController {
     /**
      * 查询子部门列表
      */
-    @ApiOperation("查询子部门列表")
+    @Operation(summary = "查询子部门列表")
     @ApiOperationSupport(order = 10)
     @GetMapping("/children_list")
     public SimpleResponseForm<List<SysDept>> childrenList(String deptId) {
@@ -156,7 +160,7 @@ public class SysDeptController extends BaseController {
     /**
      * 查询子部门ID列表
      */
-    @ApiOperation("查询子部门ID列表")
+    @Operation(summary = "查询子部门ID列表")
     @ApiOperationSupport(order = 11)
     @GetMapping("/children_id_list")
     public SimpleResponseForm<List<String>> childrenIdList(String deptId) {

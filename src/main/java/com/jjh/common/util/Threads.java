@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 
 /**
  * 线程相关工具类.
- * 
+ *
  * @author ruoyi
  */
 public class Threads
@@ -25,7 +25,6 @@ public class Threads
         }
         catch (InterruptedException e)
         {
-            return;
         }
     }
 
@@ -59,7 +58,7 @@ public class Threads
             }
         }
     }
-    
+
     /**
      * 打印线程异常信息
      */

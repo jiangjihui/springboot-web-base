@@ -4,9 +4,6 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * 接口信息
  *
@@ -17,9 +14,6 @@ import java.util.List;
 @Component
 @ConfigurationProperties(prefix = "app.swagger")
 public class SwagggerProperties {
-
-    /** 接口分组列表 */
-    private List<SwaggerGroup> groups = new ArrayList<>();
 
     /** 标题*/
     private static String title;

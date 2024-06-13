@@ -11,8 +11,10 @@ import com.jjh.common.web.controller.BaseController;
 import com.jjh.common.web.form.PageRequestForm;
 import com.jjh.common.web.form.PageResponseForm;
 import com.jjh.common.web.form.SimpleResponseForm;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -22,8 +24,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +33,7 @@ import java.util.List;
  * @author jjh
  * @date 2020/02/16
 */
-@Api(tags = "文章管理")
+@Tag(name = "文章管理")
 @RestController
 @RequestMapping("/demo/article")
 public class ArticleController extends BaseController {
@@ -48,7 +48,7 @@ public class ArticleController extends BaseController {
     /**
      * 文章列表
      */
-    @ApiOperation("文章列表")
+    @Operation(summary = "文章列表")
     @PostMapping("/list")
     public SimpleResponseForm<PageResponseForm<ArticleListResp>> list(@RequestBody PageRequestForm<ArticleQueryListForm> form) {
         List<Article> list = articleService.list(form);
@@ -67,7 +67,7 @@ public class ArticleController extends BaseController {
     /**
      * 新增文章
      */
-    @ApiOperation("新增文章")
+    @Operation(summary = "新增文章")
     @PostMapping("/add")
     public SimpleResponseForm<Article> add(@Valid @RequestBody Article entity) {
         Article result = articleService.add(entity);
@@ -77,7 +77,7 @@ public class ArticleController extends BaseController {
     /**
      * 更新文章
      */
-    @ApiOperation("更新文章")
+    @Operation(summary = "更新文章")
     @PostMapping("/update")
     public SimpleResponseForm<Article> update(@Valid @RequestBody Article entity) {
         Article result = articleService.update(entity);
@@ -87,7 +87,7 @@ public class ArticleController extends BaseController {
     /**
      * 删除文章
      */
-    @ApiOperation("删除文章")
+    @Operation(summary = "删除文章")
     @GetMapping("/delete")
     public SimpleResponseForm<String> delete(String ids) {
         articleService.del(ids);
@@ -98,7 +98,7 @@ public class ArticleController extends BaseController {
     /**
      * msg
      */
-    @ApiOperation("msg")
+    @Operation(summary = "msg")
     @GetMapping("/msg")
     public SimpleResponseForm<String> msg() {
 //        LocaleContextHolder.setLocale(Locale.US);
@@ -125,7 +125,7 @@ public class ArticleController extends BaseController {
     /**
      * selectAll
      */
-    @ApiOperation("selectAll")
+    @Operation(summary = "selectAll")
     @GetMapping("/select_all")
     public SimpleResponseForm<List<Article>> selectAll() {
         return success(articleMapper.selectAllList());
@@ -134,34 +134,34 @@ public class ArticleController extends BaseController {
     /**
      * selectAll
      */
-    @ApiOperation("selectOne")
+    @Operation(summary = "selectOne")
     @GetMapping("/selectOne")
     public SimpleResponseForm<Article> selectOne() {
         return success(articleMapper.selectOneObject());
     }
 
 
-    @ApiOperation("异步消息测试")
+    @Operation(summary = "异步消息测试")
     @GetMapping("/async_log")
     public SimpleResponseForm<String> asyncLog() {
         articleService.asyncLog();
         return new SimpleResponseForm<>();
     }
 
-    @ApiOperation("未定义的动态SQL查询")
+    @Operation(summary = "未定义的动态SQL查询")
     @GetMapping("/dynamic_sql_query")
     public SimpleResponseForm<List<Object>> dynamicSqlQuery(String methodName) {
         return new SimpleResponseForm<>(articleService.dynamicSqlQuery(methodName));
     }
 
-    @ApiOperation("多线程并行")
+    @Operation(summary = "多线程并行")
     @GetMapping("/mult_thread")
     public SimpleResponseForm<String> multThread() {
         articleService.multThread();
         return new SimpleResponseForm<>("OK");
     }
 
-    @ApiOperation("游标查询数据")
+    @Operation(summary = "游标查询数据")
     @GetMapping("/cursor_list")
     public SimpleResponseForm<String> cursorList() {
         int result = articleService.cursorDeal(100);

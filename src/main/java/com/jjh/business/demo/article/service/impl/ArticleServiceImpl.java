@@ -21,7 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -160,8 +160,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
     static class RunTask implements Runnable{
 
-        private Runnable task;
-        private CountDownLatch latch;
+        private final Runnable task;
+        private final CountDownLatch latch;
 
         public RunTask(CountDownLatch latch, Runnable task) {
             this.task = task;

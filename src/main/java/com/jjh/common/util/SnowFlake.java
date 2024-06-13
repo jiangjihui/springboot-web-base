@@ -36,10 +36,10 @@ public class SnowFlake {
     private long sequence = 0L;
     //服务器ID
     private long workerId = 1L;
-    private static long workerMask = -1L ^ (-1L << workerIdBits);
+    private static final long workerMask = -1L ^ (-1L << workerIdBits);
     //进程编码
     private long processId = 1L;
-    private static long processMask = -1L ^ (-1L << datacenterIdBits);
+    private static final long processMask = -1L ^ (-1L << datacenterIdBits);
 
     private static SnowFlake snowFlake = null;
 

@@ -43,7 +43,7 @@ public class QuerySupport {
             // 处理驼峰命名转下划线
             Environment environment = SpringUtil.getBean(Environment.class);
             Boolean isUnderlineCase = environment.getProperty("mybatis-plus.configuration.map-underscore-to-camel-case", Boolean.class);
-            if (isUnderlineCase != null && Boolean.TRUE.equals(isUnderlineCase)) {
+            if (Boolean.TRUE.equals(isUnderlineCase)) {
                 StrUtil.toUnderlineCase(column);
             }
             // 处理private属性

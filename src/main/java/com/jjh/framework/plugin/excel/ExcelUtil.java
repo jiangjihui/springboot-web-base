@@ -420,7 +420,7 @@ public class ExcelUtil<T>
         {
             row = sheet.createRow(i + 1 - startNo);
             // 得到导出对象.
-            T vo = (T) list.get(i);
+            T vo = list.get(i);
             int column = 0;
             for (Object[] os : fields)
             {
@@ -555,7 +555,7 @@ public class ExcelUtil<T>
         else if (StringUtils.isNotBlank(attr.readConverterExp()))
         {
             // 有字典时，设置下拉列选项
-            setXSSFValidation(sheet, this.convertByExp(attr.readConverterExp()), 1, 100, column, column);
+            setXSSFValidation(sheet, convertByExp(attr.readConverterExp()), 1, 100, column, column);
         }
         else if (StrUtil.isNotBlank(attr.dictConverter()))
         {
@@ -925,7 +925,7 @@ public class ExcelUtil<T>
                 if (cellType == CellType.NUMERIC || cellType == CellType.FORMULA)
                 {
                     val = cell.getNumericCellValue();
-                    if (org.apache.poi.hssf.usermodel.HSSFDateUtil.isCellDateFormatted(cell))
+                    if (org.apache.poi.ss.usermodel.DateUtil.isCellDateFormatted(cell))
                     {
                         val = org.apache.poi.ss.usermodel.DateUtil.getJavaDate((Double) val); // POI Excel 日期格式转换
                     }

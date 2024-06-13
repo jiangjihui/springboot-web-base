@@ -2,7 +2,7 @@ package com.jjh.business.demo.article.controller.resp;
 
 import com.jjh.framework.aspect.sensitive.DataMasking;
 import com.jjh.framework.aspect.sensitive.DataMaskingFunc;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
 
@@ -18,10 +18,10 @@ public class ArticleListResp {
 
     private String id;
 
-    @ApiModelProperty(value = "名称")
+    @Schema(description = "名称")
     private String name;
 
     @DataMasking(maskFunc = DataMaskingFunc.ALL_MARK)
-    @ApiModelProperty(value = "内容")
+    @Schema(description = "内容")
     private String content;
 }

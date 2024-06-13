@@ -100,6 +100,6 @@ public class GlobalExceptionHandler {
 //                logger.error("数据校验失败 : object{"+fieldError.getObjectName()+"},field{"+fieldError.getField()+ "},errorMessage{"+fieldError.getDefaultMessage()+"}");
             });
         }
-        return SimpleResponseForm.error(400, "请填写正确信息：" + msg.toString());
+        return SimpleResponseForm.error(400, "请填写正确信息：" + msg);
     }
 }

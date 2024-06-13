@@ -1,6 +1,7 @@
 package com.jjh.framework.shiro;
 
 import com.jjh.framework.jwt.JwtFilter;
+import jakarta.servlet.Filter;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -16,7 +17,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -43,7 +43,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/swagger/**","anon");
         filterChainDefinitionMap.put("/webjars/**", "anon");
         filterChainDefinitionMap.put("/swagger-resources/**","anon");
-        filterChainDefinitionMap.put("/v2/**","anon");
+        filterChainDefinitionMap.put("/v3/**","anon");
         filterChainDefinitionMap.put("/captcha/**","anon");
 
         filterChainDefinitionMap.put("/demo/**", "anon");

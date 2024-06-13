@@ -16,8 +16,8 @@ import com.jjh.framework.redis.RedisRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -60,7 +60,7 @@ public class OnlineLogServiceImpl implements OnlineLogService {
     @Override
     public List<OnlineLog> listOnline(PageRequestForm form) {
         Set<Object> onlineList = redisRepository.zSetRange(
-                CacheConstants.SYS_USER_TOKEN, (form.getPageNum() - 1) * form.getPageSize(), form.getPageSize());
+                CacheConstants.SYS_USER_TOKEN, (long) (form.getPageNum() - 1) * form.getPageSize(), form.getPageSize());
         form.setTotal(redisRepository.zSetSize(CacheConstants.SYS_USER_TOKEN));
         ArrayList<OnlineLog> resultList = new ArrayList<>(onlineList.size());
         for (Object o : onlineList) {

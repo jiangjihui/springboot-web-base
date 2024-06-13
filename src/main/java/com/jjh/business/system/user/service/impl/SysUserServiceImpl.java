@@ -30,8 +30,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
+import jakarta.annotation.Resource;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 
@@ -230,7 +230,7 @@ public class SysUserServiceImpl implements SysUserService {
             throw new BusinessException("未找到该用户，请检查");
         }
         if (BaseConstants.SYS_ADMIN.equals(sysUser.getUsername())) {
-            return CollectionUtil.toList(new String[]{"admin"});
+            return CollectionUtil.toList("admin");
         }
         return sysRoleMapper.listSysRoleCodeByStatus(userId, BaseConstants.STATUS_NOMAL);
     }

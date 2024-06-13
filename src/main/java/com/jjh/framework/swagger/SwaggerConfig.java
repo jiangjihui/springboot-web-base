@@ -1,33 +1,19 @@
 package com.jjh.framework.swagger;
 
-import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.jjh.framework.jwt.JWTConstants;
 import com.jjh.framework.properties.ApplicationInfoProperties;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import org.springdoc.core.customizers.GlobalOpenApiCustomizer;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.RequestHandler;
-import springfox.documentation.builders.ApiInfoBuilder;
-import springfox.documentation.builders.PathSelectors;
-import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.service.*;
-import springfox.documentation.spi.DocumentationType;
-import springfox.documentation.spi.service.contexts.SecurityContext;
-import springfox.documentation.spring.web.plugins.Docket;
-import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.function.Predicate;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Swagger2API文档的配置
@@ -37,114 +23,48 @@ import java.util.function.Predicate;
  **/
 @Configuration
 @EnableAutoConfiguration
-@ConditionalOnBean(SwagggerProperties.class)
-@EnableConfigurationProperties(SwagggerProperties.class)
-@EnableSwagger2WebMvc
-public class SwaggerConfig implements ApplicationContextAware {
+// @ConditionalOnBean(SwagggerProperties.class)
+// @EnableConfigurationProperties(SwagggerProperties.class)
+public class SwaggerConfig {
 
     /** 用户配置 */
-    private final SwagggerProperties properties;
+    // private final SwagggerProperties properties;
 
-    private ConfigurableApplicationContext configurableApplicationContext;
-
-    public SwaggerConfig(SwagggerProperties swagggerProperties) {
-        this.properties = swagggerProperties;
-    }
 
     /**
-     * 创建swagger接口分组
-     * @return
+     * 根据@Tag 上的排序，写入x-order
+     *
+     * @return the global open api customizer
      */
     @Bean
-    public String createDocket() {
-        BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(Docket.class);
-
-        beanDefinitionBuilder.addConstructorArgValue(DocumentationType.SWAGGER_2);
-
-        BeanDefinition beanDefinition = beanDefinitionBuilder.getRawBeanDefinition();
-
-        BeanDefinitionRegistry beanFactory = (BeanDefinitionRegistry) configurableApplicationContext.getBeanFactory();
-
-        // 注册所有定义的接口分组
-        if (CollectionUtil.isNotEmpty(properties.getGroups())) {
-            properties.getGroups().forEach(group -> {
-                beanFactory.registerBeanDefinition(group.getGroupName(), beanDefinition);
-                Docket docket = configurableApplicationContext.getBean(group.getGroupName(), Docket.class);
-                // 获取需要扫描的接口目录
-                Predicate<RequestHandler> apiPackage = null;
-                for (String str : group.getPackages()) {
-                    if (apiPackage == null){
-                        apiPackage = RequestHandlerSelectors.basePackage(str);
-                    }
-                    else {
-                        apiPackage = apiPackage.or(RequestHandlerSelectors.basePackage(str));
-                    }
-                }
-                docket
-                        // 用来创建该API的基本信息，展示在文档的页面中（自定义展示的信息）
-                        .apiInfo(apiInfo())
-                        // 设置分组名称
-                        .groupName(group.getGroupName())
-                        // 设置哪些接口暴露给Swagger展示
-                        .select()
-                        .apis(apiPackage)
-                        .paths(PathSelectors.any())
-                        .build()
-                        .securityContexts(Collections.singletonList(securityContext()))
-                        .securitySchemes(Collections.singletonList(securityScheme()));
-            });
-        }
-
-        return "createDocket";
+    public GlobalOpenApiCustomizer orderGlobalOpenApiCustomizer() {
+        return openApi -> {
+            if (openApi.getTags()!=null){
+                openApi.getTags().forEach(tag -> {
+                    Map<String,Object> map=new HashMap<>();
+                    map.put("x-order", RandomUtil.randomInt(0,100));
+                    tag.setExtensions(map);
+                });
+            }
+            if(openApi.getPaths()!=null){
+                openApi.addExtension("x-test123","333");
+                openApi.getPaths().addExtension("x-abb",RandomUtil.randomInt(1,100));
+            }
+        };
     }
 
-    private ApiInfo apiInfo() {
-        return new ApiInfoBuilder()
-                .title(ApplicationInfoProperties.getApiTitle())
-                .description(ApplicationInfoProperties.getDescription())
-                .contact(new Contact(ApplicationInfoProperties.getAuthor(), null, ApplicationInfoProperties.getContact()))
-                .version(ApplicationInfoProperties.getVersion())
-                .build();
-    }
-
-
-    /**
-     * 解决2.0.8版本securitySchemes失效
-     * https://gitee.com/xiaoym/knife4j/issues/I28MX0
-     * @return
-     */
-    private SecurityContext securityContext() {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex("^((?!login).)+$").and(PathSelectors.regex("^((?!/gen/).)+$")))
-                .build();
-    }
-
-    /**
-     * 解决2.0.8版本securitySchemes失效
-     * https://gitee.com/xiaoym/knife4j/issues/I28MX0
-     * @return
-     */
-    private List<SecurityReference> defaultAuth() {
-        AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
-        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
-        authorizationScopes[0] = authorizationScope;
-        return Collections.singletonList(new SecurityReference(JWTConstants.X_ACCESS_TOKEN, authorizationScopes));
-    }
-
-    /***
-     * oauth2配置
-     * 需要增加swagger授权回调地址
-     * http://localhost:8888/webjars/springfox-swagger-ui/o2c.html
-     * @return
-     */
     @Bean
-    SecurityScheme securityScheme() {
-        return new ApiKey(JWTConstants.X_ACCESS_TOKEN, JWTConstants.X_ACCESS_TOKEN, "header");
+    public OpenAPI customOpenAPI() {
+        return new OpenAPI()
+                .addSecurityItem(new SecurityRequirement().addList(JWTConstants.X_ACCESS_TOKEN))
+                .info(new Info()
+                        .title(ApplicationInfoProperties.getApiTitle())
+                        .version(ApplicationInfoProperties.getVersion())
+                        .description(ApplicationInfoProperties.getDescription())
+                        .summary(ApplicationInfoProperties.getContact())
+                        .termsOfService("http://doc.xiaominfo.com")
+                        .license(new License().name("Apache 2.0")
+                                .url("http://doc.xiaominfo.com")));
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        configurableApplicationContext = (ConfigurableApplicationContext) applicationContext;
-    }
 }

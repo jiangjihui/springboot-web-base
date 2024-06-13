@@ -2,7 +2,7 @@ package com.jjh.common.model;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -19,11 +19,11 @@ public abstract class AuditBaseEntity extends BaseEntity {
 
     protected static final String TABLE_PREFIX = "";
 
-    @ApiModelProperty("[base]创建者")
+    @Schema(description = "[base]创建者")
     @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
-    @ApiModelProperty("[base]更新者")
+    @Schema(description = "[base]更新者")
     @TableField(fill = FieldFill.UPDATE)
     private String updateBy;
 

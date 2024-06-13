@@ -12,8 +12,7 @@ import com.jjh.business.common.gen.controller.form.GenTargetPathForm;
 import com.jjh.business.common.gen.service.GenService;
 import com.jjh.common.exception.BusinessException;
 import com.jjh.framework.plugin.velocity.VelocityInitializer;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.apache.commons.lang.StringUtils;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -22,9 +21,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 /**
  * 代码生成 服务层处理
@@ -78,14 +87,14 @@ public class GenServiceImpl implements GenService {
     public void genCodeFromTargetPath(GenTargetPathForm form) {
         String packagePath = form.getPackagePath();
         String author = form.getAuthor();
-        Boolean importAndExport = form.getImportAndExport() == null ? false : form.getImportAndExport();
+        Boolean importAndExport = form.getImportAndExport() != null && form.getImportAndExport();
         if (StrUtil.isBlank(packagePath)) {
             throw new BusinessException("目录不能为空");
         }
         // 获取各个类
         File[] modelFileArray = new File(packagePath).listFiles();
         String prefix = "src\\main\\java\\";
-        String packageName = packagePath.substring(packagePath.lastIndexOf(prefix) + prefix.length(), packagePath.length()).replace("\\",".");
+        String packageName = packagePath.substring(packagePath.lastIndexOf(prefix) + prefix.length()).replace("\\",".");
         // 包含项集合
         Vector<String> includeEntityCollection = new Vector<>();
         if (StrUtil.isNotBlank(form.getIncludeEntity())) {
@@ -110,7 +119,7 @@ public class GenServiceImpl implements GenService {
                 String classPackageName = packageName + "." + className;
                 Class<?> clazz = Class.forName(classPackageName);
                 // 获取对应的注解（方便获取注解内的值）
-                ApiModel apiModel = clazz.getAnnotation(ApiModel.class);
+                Schema apiModel = clazz.getAnnotation(Schema.class);
 
                 GenEntityForm dto = new GenEntityForm();
                 String packageParentName = packageName.substring(0, packageName.lastIndexOf("."));
@@ -120,7 +129,7 @@ public class GenServiceImpl implements GenService {
                 dto.setModuleName(moduleName);
                 dto.setClassName(className);
                 dto.setPackageName(packageParentName);
-                dto.setComment(apiModel.value());
+                dto.setComment(apiModel.description());
                 dto.setTargetPath(packagePath);
                 dto.setImportAndExport(importAndExport);
                 dto.setTargetFile(form.getTargetFile());
@@ -197,8 +206,8 @@ public class GenServiceImpl implements GenService {
         try {
             Class<?> clazz = Class.forName(form.getClassPackageName());
             // 获取对应的注解（方便获取注解内的值）
-            ApiModel apiModel = clazz.getAnnotation(ApiModel.class);
-            String tableComment = apiModel.value();
+            Schema apiModel = clazz.getAnnotation(Schema.class);
+            String tableComment = apiModel.description();
             Field[] fields = clazz.getDeclaredFields();
             StringBuilder tableStrBuilder = new StringBuilder();
             StringBuilder columnStrBuilder = new StringBuilder();
@@ -255,9 +264,9 @@ public class GenServiceImpl implements GenService {
                     else if(Date.class == fieldType){
                         columnType = "datetime(3)";
                     }
-                    ApiModelProperty apiModelProperty = field.getAnnotation(ApiModelProperty.class);
+                    Schema apiModelProperty = field.getAnnotation(Schema.class);
                     if (apiModelProperty != null){
-                        columnComment = apiModelProperty.value();
+                        columnComment = apiModelProperty.description();
                     }
 
                     columnStrBuilder.append(columnType);

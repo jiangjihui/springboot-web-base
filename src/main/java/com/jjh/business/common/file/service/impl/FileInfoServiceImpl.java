@@ -15,11 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.annotation.Resource;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
 /**
@@ -49,7 +50,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         // 上传的文件名称
         String uploadFileName = file.getOriginalFilename();
         // 保存的文件名称（重命名文件，避免重名覆盖）
-        String fileKey = UUID.randomUUID().toString() + "." + FileUtil.extName(uploadFileName);
+        String fileKey = UUID.randomUUID() + "." + FileUtil.extName(uploadFileName);
 
         // 上传的文件路径
         String fileName = FileProperties.getResourcePath() + File.separator + fileKey;
@@ -89,7 +90,7 @@ public class FileInfoServiceImpl implements FileInfoService {
         // 上传的文件名称
         String uploadFileName = file.getOriginalFilename();
         // 保存的文件名称（重命名文件，避免重名覆盖）
-        String fileKey = UUID.randomUUID().toString() + "." + FileUtil.extName(uploadFileName);
+        String fileKey = UUID.randomUUID() + "." + FileUtil.extName(uploadFileName);
 
         // 上传的文件路径
         String fileName = fileKey;
@@ -162,10 +163,7 @@ public class FileInfoServiceImpl implements FileInfoService {
      */
     public static boolean checkAllowDownload(String fileName) {
         // 禁止目录上跳级别
-        if (StrUtil.contains(fileName, "..")) {
-            return false;
-        }
-        return true;
+        return !StrUtil.contains(fileName, "..");
     }
 
     /**
@@ -210,7 +208,7 @@ public class FileInfoServiceImpl implements FileInfoService {
             if (agent.contains("MSIE"))
             {
                 // IE浏览器
-                filename = URLEncoder.encode(filename, "utf-8");
+                filename = URLEncoder.encode(filename, StandardCharsets.UTF_8);
                 filename = filename.replace("+", " ");
             }
             else if (agent.contains("Firefox"))
@@ -221,12 +219,12 @@ public class FileInfoServiceImpl implements FileInfoService {
             else if (agent.contains("Chrome"))
             {
                 // google浏览器
-                filename = URLEncoder.encode(filename, "utf-8");
+                filename = URLEncoder.encode(filename, StandardCharsets.UTF_8);
             }
             else
             {
                 // 其它浏览器
-                filename = URLEncoder.encode(filename, "utf-8");
+                filename = URLEncoder.encode(filename, StandardCharsets.UTF_8);
             }
         } catch (UnsupportedEncodingException e) {
             logger.info("文件名编码失败。", e.getMessage());

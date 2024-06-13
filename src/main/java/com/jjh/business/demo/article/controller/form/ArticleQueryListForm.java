@@ -2,7 +2,7 @@ package com.jjh.business.demo.article.controller.form;
 
 import com.jjh.common.web.query.MatchType;
 import com.jjh.common.web.query.QueryCondition;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -15,11 +15,11 @@ import lombok.Data;
 public class ArticleQueryListForm {
 
     @QueryCondition(func = MatchType.like)
-    @ApiModelProperty(value = "名称")
+    @Schema(description = "名称")
     private String name;
 
     @QueryCondition
-    @ApiModelProperty(value = "内容")
+    @Schema(description = "内容")
     private String content;
 
 }

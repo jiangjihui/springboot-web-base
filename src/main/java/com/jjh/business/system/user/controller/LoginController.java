@@ -12,8 +12,10 @@ import com.jjh.common.web.controller.BaseController;
 import com.jjh.common.web.form.SimpleResponseForm;
 import com.jjh.framework.jwt.JwtUtil;
 import com.jjh.framework.redis.RedisRepository;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  * @author jjh
  * @date 2019/9/20
  **/
-@Api(tags = "[a1010]登录管理")
+@Tag(name = "[a1010]登录管理")
 @RestController
 public class LoginController extends BaseController {
 
@@ -52,7 +52,7 @@ public class LoginController extends BaseController {
     /**
      * 用户登录
      */
-    @ApiOperation("用户登录")
+    @Operation(summary = "用户登录")
     @PostMapping("/login")
     public SimpleResponseForm<SysUser> login(@Valid @RequestBody LoginForm form, HttpServletRequest request) {
         String username = form.getUsername();
@@ -91,7 +91,7 @@ public class LoginController extends BaseController {
      * @return
      * @throws Exception
      */
-//    @ApiOperation("用户注册")
+//    @Operation(summary = "用户注册")
 //    @PostMapping("/register")
     public SimpleResponseForm<SysUser> register(@Valid @RequestBody SysUser sysUser) throws Exception {
         SysUser user = sysUserService.add(sysUser);
@@ -101,7 +101,7 @@ public class LoginController extends BaseController {
     /**
      * 用户退出
      */
-    @ApiOperation("用户退出")
+    @Operation(summary = "用户退出")
     @GetMapping("/logout")
     public SimpleResponseForm<String> logout() {
         String token = JwtUtil.getToken();

@@ -1,10 +1,11 @@
 package com.jjh.common.util.request;
 
 
-import cn.hutool.extra.servlet.ServletUtil;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 
 /**
@@ -31,7 +32,7 @@ public class GetRequestJsonUtils {
             if (request.getQueryString() == null) {
                 return null;
             }
-            return new String(request.getQueryString().getBytes("iso-8859-1"),"utf-8").replaceAll("%22", "\"");
+            return new String(request.getQueryString().getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8).replaceAll("%22", "\"");
             // POST
         } else {
             return getRequestPostStr(request);
@@ -51,7 +52,7 @@ public class GetRequestJsonUtils {
         if (contentLength < 0) {
             return null;
         }
-        byte buffer[] = new byte[contentLength];
+        byte[] buffer = new byte[contentLength];
         for (int i = 0; i < contentLength; ) {
 
             int readlen = request.getInputStream().read(buffer, i,contentLength - i);
@@ -71,7 +72,7 @@ public class GetRequestJsonUtils {
      */
     public static String getRequestPostStr(HttpServletRequest request)
             throws IOException {
-        byte buffer[] = ServletUtil.getBodyBytes(request);
+        byte[] buffer = JakartaServletUtil.getBodyBytes(request);
         String charEncoding = request.getCharacterEncoding();
         if (charEncoding == null) {
             charEncoding = "UTF-8";

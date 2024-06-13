@@ -18,7 +18,7 @@ import java.util.*;
  **/
 public class JpaVOUtils {
 
-    private static Logger logger = LoggerFactory.getLogger(JpaVOUtils.class);
+    private static final Logger logger = LoggerFactory.getLogger(JpaVOUtils.class);
 
     /**
      * 将数组数据转换为实体类
@@ -80,8 +80,8 @@ public class JpaVOUtils {
         try {
             String firstLetter = fieldName.substring(0, 1).toUpperCase();
             String getter = "get" + firstLetter + fieldName.substring(1);
-            Method method = modle.getClass().getMethod(getter, new Class[]{});
-            Object value = method.invoke(modle, new Object[]{});
+            Method method = modle.getClass().getMethod(getter);
+            Object value = method.invoke(modle);
             return value;
         } catch (Exception e) {
             return null;

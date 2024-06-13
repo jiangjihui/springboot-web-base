@@ -21,7 +21,7 @@ import com.jjh.common.web.form.PageRequestForm;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,7 +69,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (entity.getStatus() == null) {
             entity.setStatus(BaseConstants.STATUS_NOMAL);
         }
-        SysRole sysRole = sysRoleMapper.selectOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getCode, entity.getCode()));;
+        SysRole sysRole = sysRoleMapper.selectOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getCode, entity.getCode()));
         if (sysRole != null) {
             throw new BusinessException("该角色代码已存在："+ sysRole.getName());
         }
@@ -90,7 +90,7 @@ public class SysRoleServiceImpl implements SysRoleService {
         if (Objects.isNull(oldEntity)) {
             throw new BusinessException("对象不存在，请检查");
         }
-        SysRole sysRole = sysRoleMapper.selectOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getCode, entity.getCode()));;
+        SysRole sysRole = sysRoleMapper.selectOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getCode, entity.getCode()));
         if (sysRole != null && !sysRole.getId().equals(oldEntity.getId())) {
             throw new BusinessException("该角色代码已存在："+ sysRole.getName());
         }
@@ -152,7 +152,7 @@ public class SysRoleServiceImpl implements SysRoleService {
      */
     @Override
     public List<String> queryUserRole(String userId) {
-        List<SysUserRoleMapping> mappings = sysUserRoleMappingMapper.selectList(Wrappers.<SysUserRoleMapping>lambdaQuery().eq(SysUserRoleMapping::getUserId, userId));;
+        List<SysUserRoleMapping> mappings = sysUserRoleMappingMapper.selectList(Wrappers.<SysUserRoleMapping>lambdaQuery().eq(SysUserRoleMapping::getUserId, userId));
         if (CollectionUtil.isEmpty(mappings)) {
             return null;
         }
