@@ -45,7 +45,7 @@
 建议开发者使用以下环境，这样避免版本带来的问题  
 * IDE:IDEA
 * DB:MySQL5.7
-* JDK:JAVA 8
+* JDK:JAVA 17
 * WEB:Tomcat8
   
 ## 运行环境  
