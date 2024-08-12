@@ -7,6 +7,7 @@ import com.jjh.business.demo.article.controller.resp.ArticleListResp;
 import com.jjh.business.demo.article.mapper.ArticleMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.business.demo.article.service.ArticleService;
+import com.jjh.common.util.BatchUtils;
 import com.jjh.common.web.controller.BaseController;
 import com.jjh.common.web.form.PageRequestForm;
 import com.jjh.common.web.form.PageResponseForm;
@@ -166,5 +167,18 @@ public class ArticleController extends BaseController {
     public SimpleResponseForm<String> cursorList() {
         int result = articleService.cursorDeal(100);
         return new SimpleResponseForm<>(String.valueOf(result));
+    }
+
+    @Operation(summary = "批量处理")
+    @GetMapping("/batch_list")
+    public void batchList() {
+        List<String> list = new ArrayList<>();
+        for (int i = 0; i < 30; i++) {
+            list.add(i+"");
+        }
+        // BatchUtils.batch(list, 10, System.out::println);
+        BatchUtils.batch(list, 10, batchList -> {
+            System.out.println(batchList);
+        });
     }
 }

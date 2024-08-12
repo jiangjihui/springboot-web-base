@@ -152,4 +152,12 @@ public class RedisRepository {
     public Long zSetSize(String key) {
         return redisTemplate.opsForZSet().size(key);
     }
+
+    /**
+     * 获取一定范围内的对象
+     * @return
+     */
+    public void expire(String key, long timeout, TimeUnit unit) {
+        redisTemplate.expire(key,timeout, unit);
+    }
 }
