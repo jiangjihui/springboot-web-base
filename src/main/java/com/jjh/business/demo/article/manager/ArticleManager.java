@@ -26,6 +26,7 @@ public class ArticleManager {
     public int cursorList(int batchSize, Article article, Consumer<List> consumer) {
         return myBatisWrapper.cursorList(batchSize, ArticleMapper.class,
                 article, consumer);
+        // return myBatisWrapper.cursorList(batchSize, ArticleMapper.class, mapper -> mapper.cursorList(article), consumer);
     }
 
 }

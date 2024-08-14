@@ -13,6 +13,8 @@ import com.jjh.common.exception.BusinessException;
 import com.jjh.common.util.IdGenerateHelper;
 import com.jjh.common.util.PojoUtils;
 import com.jjh.common.web.form.PageRequestForm;
+import com.jjh.common.wrapper.MyBatisWrapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
@@ -21,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.annotation.Resource;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -45,6 +46,8 @@ public class ArticleServiceImpl implements ArticleService {
     private SqlSessionTemplate sqlSessionTemplate;
     @Autowired
     private SqlSession sqlSession;
+    @Autowired
+    private MyBatisWrapper myBatisWrapper;
 
 
     /**
@@ -218,8 +221,12 @@ public class ArticleServiceImpl implements ArticleService {
     public int cursorDeal(int batchSize) {
         Article article = new Article();
         article.setStatus(1);
-        return articleManager.cursorList(batchSize, article, list -> {
-            log.info("batch get list, size: {}", list.size());
+        // return articleManager.cursorList(batchSize, article, list -> {
+        //     log.info("batch get list, size: {}", list.size());
+        // });
+
+        return myBatisWrapper.cursorList(batchSize, ArticleMapper.class, mapper -> mapper.cursorAllList(article), list -> {
+            log.info("article name: {}", list.get(0).getName());
         });
     }
 

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * MyBatisWrapper
@@ -45,6 +46,32 @@ public class MyBatisWrapper {
             Cursor cursor = mapper.cursorList(param);
             // Cursor cursor = sqlSession.selectCursor(statement, param);
             Iterator iterator = cursor.iterator();
+            while (iterator.hasNext()) {
+                totalSize.addAndGet(1);
+                tempList.add(iterator.next());
+                if (tempList.size() >= batchSize) {
+                    consumer.accept(tempList);
+                    tempList.clear();
+                }
+            }
+            if (CollectionUtils.isNotEmpty(tempList)) {
+                consumer.accept(tempList);
+                tempList.clear();
+            }
+        }
+        return totalSize.get();
+    }
+
+    /**
+     * 游标方式查询数据
+     */
+    public <M, T> int cursorList(int batchSize, Class<M> clazz,  Function<M, Cursor<T>> callMethod, Consumer<List<T>> consumer) {
+        AtomicInteger totalSize = new AtomicInteger();
+        List<T> tempList = new ArrayList<>(batchSize);
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.REUSE)) {
+            M mapper = sqlSession.getMapper(clazz);
+            Cursor<T> cursor = callMethod.apply(mapper);
+            Iterator<T> iterator = cursor.iterator();
             while (iterator.hasNext()) {
                 totalSize.addAndGet(1);
                 tempList.add(iterator.next());
