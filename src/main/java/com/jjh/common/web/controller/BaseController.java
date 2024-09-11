@@ -24,6 +24,7 @@ public class BaseController {
      * @param result 结果
      */
     public <T> SimpleResponseForm<T> success(T result){
+        
         return new SimpleResponseForm<>(result);
     }
 

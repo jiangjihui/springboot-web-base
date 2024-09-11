@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.common.mapper.CursorMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.cursor.Cursor;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface ArticleMapper extends BaseMapper<Article>, CursorMapper<Article
 
     List<Article> selectAllList();
 
+    Cursor<Article> cursorListAll(Article queryEntity);
 }

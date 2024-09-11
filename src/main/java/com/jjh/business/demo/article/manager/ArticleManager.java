@@ -24,8 +24,10 @@ public class ArticleManager {
     private final MyBatisWrapper myBatisWrapper;
 
     public int cursorList(int batchSize, Article article, Consumer<List> consumer) {
-        return myBatisWrapper.cursorList(batchSize, ArticleMapper.class,
-                article, consumer);
+        // return myBatisWrapper.cursorList(batchSize, ArticleMapper.class,
+        //         article, consumer);
+        return myBatisWrapper.cursorList(batchSize,mapper-> mapper.cursorListAll(article),ArticleMapper.class,
+                consumer);
     }
 
 }

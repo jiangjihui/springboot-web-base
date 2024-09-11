@@ -8,6 +8,7 @@ import org.apache.ibatis.cursor.Cursor;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * MyBatisWrapper
@@ -44,6 +46,35 @@ public class MyBatisWrapper {
             CursorMapper mapper = sqlSession.getMapper(clazz);
             Cursor cursor = mapper.cursorList(param);
             // Cursor cursor = sqlSession.selectCursor(statement, param);
+            Iterator iterator = cursor.iterator();
+            while (iterator.hasNext()) {
+                totalSize.addAndGet(1);
+                tempList.add(iterator.next());
+                if (tempList.size() >= batchSize) {
+                    consumer.accept(tempList);
+                    tempList.clear();
+                }
+            }
+            if (CollectionUtils.isNotEmpty(tempList)) {
+                consumer.accept(tempList);
+                tempList.clear();
+            }
+        }
+        return totalSize.get();
+    }
+
+    /**
+     * 游标方式查询数据
+     * @param batchSize 批次大小
+     * @param clazz 查询数据的mapper类，需要继承CursorMapper接口，并实现cursorList方法
+     * @param consumer 处理数据的方法
+     * @return 游标查询到的总数据量
+     */
+    public <C, T> int cursorList(int batchSize, Function<C, Cursor<T>> clazzMethod, Class<C> clazz, Consumer<List> consumer) {
+        AtomicInteger totalSize = new AtomicInteger();
+        List tempList = new ArrayList<>(batchSize);
+        try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.REUSE)) {
+            Cursor cursor = clazzMethod.apply(sqlSession.getMapper(clazz));
             Iterator iterator = cursor.iterator();
             while (iterator.hasNext()) {
                 totalSize.addAndGet(1);
