@@ -63,4 +63,6 @@ public interface ArticleService {
     void multThread();
 
     int cursorDeal(int batchSize);
+
+    void doLock();
 }

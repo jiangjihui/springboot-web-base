@@ -10,6 +10,7 @@ import com.jjh.business.demo.article.mapper.ArticleMapper;
 import com.jjh.business.demo.article.model.Article;
 import com.jjh.business.demo.article.service.ArticleService;
 import com.jjh.common.exception.BusinessException;
+import com.jjh.common.lock.DLock;
 import com.jjh.common.util.IdGenerateHelper;
 import com.jjh.common.util.PojoUtils;
 import com.jjh.common.web.form.PageRequestForm;
@@ -26,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 文章 服务层实现
@@ -49,6 +51,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private MyBatisWrapper myBatisWrapper;
 
+    @Autowired
+    private DLock dLock;
 
     /**
      * 查询文章列表
@@ -228,6 +232,24 @@ public class ArticleServiceImpl implements ArticleService {
         return myBatisWrapper.cursorList(batchSize, ArticleMapper.class, mapper -> mapper.cursorAllList(article), list -> {
             log.info("article name: {}", list.get(0).getName());
         });
+    }
+
+    @Override
+    public void doLock() {
+        String lockKey = "web_base:lock:test";
+        boolean lock = dLock.tryLock(lockKey, 10, 30, TimeUnit.SECONDS);
+        if (lock) {
+            try {
+                log.info("do something.");
+                Thread.sleep(8000);
+            } catch (Exception e) {
+                dLock.unLock(lockKey);
+            }
+        }
+        else {
+            throw new BusinessException("lock failed.");
+        }
+
     }
 
 }

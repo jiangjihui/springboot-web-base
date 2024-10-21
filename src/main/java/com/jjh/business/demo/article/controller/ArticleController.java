@@ -181,4 +181,11 @@ public class ArticleController extends BaseController {
             System.out.println(batchList);
         });
     }
+
+    @Operation(summary = "分布式锁")
+    @GetMapping("/do_lock")
+    public void doLock() {
+        articleService.doLock();
+    }
+
 }

@@ -5,11 +5,17 @@ import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jjh.common.key.CacheConstants;
 import com.jjh.framework.context.TenantContextHolder;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
@@ -105,4 +111,28 @@ public class RedisConfig extends CachingConfigurerSupport {
         return cacheManager;
     }
 
+    @Bean(value = "redissonClient", destroyMethod = "shutdown")
+    public RedissonClient redissonClient(RedisProperties properties) {
+        final Config config = createSingleServerConfig(properties);
+        return Redisson.create(config);
+    }
+
+    private Config createSingleServerConfig(RedisProperties properties) {
+        final String protocol = properties.isSsl() ? "rediss://" : "redis://";
+        final String address = String.format("%s%s:%d", protocol, properties.getHost(), properties.getPort());
+        // final RedisProperties.Pool pool = properties.getPool();
+
+        final Config config = new Config();
+        config
+                .useSingleServer()
+                .setAddress(address)
+                .setConnectTimeout((int) (properties.getTimeout().getSeconds() * 1000))
+                .setDatabase(properties.getDatabase())
+                .setPassword(properties.getPassword())
+                // .setConnectionMinimumIdleSize(pool.getMinIdle())
+                // .setConnectionPoolSize(pool.getMaxActive())
+        ;
+
+        return config;
+    }
 }
