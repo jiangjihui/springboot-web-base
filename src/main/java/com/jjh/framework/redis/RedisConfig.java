@@ -1,5 +1,6 @@
 package com.jjh.framework.redis;
 
+import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +9,7 @@ import com.jjh.framework.context.TenantContextHolder;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.redisson.config.SingleServerConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.cache.CacheManager;
@@ -123,15 +125,14 @@ public class RedisConfig extends CachingConfigurerSupport {
         // final RedisProperties.Pool pool = properties.getPool();
 
         final Config config = new Config();
-        config
+        SingleServerConfig singleServerConfig = config
                 .useSingleServer()
                 .setAddress(address)
                 .setConnectTimeout((int) (properties.getTimeout().getSeconds() * 1000))
-                .setDatabase(properties.getDatabase())
-                .setPassword(properties.getPassword())
-                // .setConnectionMinimumIdleSize(pool.getMinIdle())
-                // .setConnectionPoolSize(pool.getMaxActive())
-        ;
+                .setDatabase(properties.getDatabase());
+        if (StrUtil.isNotBlank(properties.getPassword())) {
+            singleServerConfig.setPassword(properties.getPassword());
+        }
 
         return config;
     }

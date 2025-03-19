@@ -17,13 +17,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Conditional;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -44,6 +48,20 @@ public class HelpController extends BaseController {
 
     private final SqlSessionTemplate sessionTemplate;
     private final static String HEADER_AUTH_KEY = "X-Authorization";
+    private final ResourceLoader resourceLoader;
+
+    public Properties getGitProperties() {
+        Properties properties = new Properties();
+        Resource resource = resourceLoader.getResource("classpath:git.properties");
+        try {
+            if (resource.exists()) {
+                properties.load(resource.getInputStream());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return properties;
+    }
 
     @Operation(summary = "服务状态")
     @GetMapping("/server_status")
@@ -52,9 +70,11 @@ public class HelpController extends BaseController {
         map.put("startTime", System.getProperty("app.startup.time"));
         map.put("env", System.getProperty("app.startup.env"));
 
-        Properties gitProperties = PropertiesUtils.loadProperties("git.properties");
+        Properties gitProperties = getGitProperties();
         if (gitProperties != null) {
-            map.put("version", gitProperties.getProperty("git.build.version", ""));
+            gitProperties.entrySet().forEach(entry -> {
+                map.put(entry.getKey().toString(), entry.getValue().toString());
+            });
         }
         return success(map);
     }

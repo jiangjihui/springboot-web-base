@@ -241,6 +241,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
 
+            <!-- Maven 项目获取 Git 的提交分支、commit id、构建时间等信息  https://www.cnblogs.com/shoufeng/p/18521914 -->
             <plugin>
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
@@ -254,6 +255,24 @@
                 </executions>
                 <configuration>
                     <dotGitDirectory>${project.basedir}/.git</dotGitDirectory>
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+                    <skipPoms>false</skipPoms>
+                    <generateGitPropertiesFilename>
+                        ${project.build.outputDirectory}/git.properties
+                    </generateGitPropertiesFilename>
+                    <gitDescribe>
+                        <!-- don't generate the describe property -->
+                        <skip>false</skip>
+                        <!-- abbrev commit id length -->
+                        <abbrev>8</abbrev>
+                    </gitDescribe>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.branch$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.build.(time|version)$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.(id|time)$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                    </includeOnlyProperties>
                 </configuration>
             </plugin>
 
