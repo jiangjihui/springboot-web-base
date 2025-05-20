@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.thread.ThreadUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import com.google.common.collect.Lists;
 import com.jjh.business.demo.article.controller.form.ArticleQueryListForm;
 import com.jjh.business.demo.article.manager.ArticleManager;
 import com.jjh.business.demo.article.mapper.ArticleMapper;
@@ -12,6 +13,7 @@ import com.jjh.business.demo.article.service.ArticleService;
 import com.jjh.common.exception.BusinessException;
 import com.jjh.common.lock.DLock;
 import com.jjh.common.util.IdGenerateHelper;
+import com.jjh.common.util.ParallelRunner;
 import com.jjh.common.util.PojoUtils;
 import com.jjh.common.web.form.PageRequestForm;
 import com.jjh.common.wrapper.MyBatisWrapper;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -250,6 +253,32 @@ public class ArticleServiceImpl implements ArticleService {
             throw new BusinessException("lock failed.");
         }
 
+    }
+
+    @Override
+    public void doParallel() {
+        log.info("doParallel start.");
+        ArrayList<Integer> list = Lists.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        ParallelRunner runner = new ParallelRunner(3);
+        list.parallelStream().forEach(i -> {
+            log.info("before thread: {}, i: {}", Thread.currentThread().getName(), i);
+            runner.execute(() -> {
+                log.info("current thread: {}, i: {}", Thread.currentThread().getName(), i);
+                log.info("sleep start.");
+                try {
+                    int randomMillis = 1000 + RandomUtil.randomInt(1000);
+                    Thread.sleep(randomMillis);
+                }
+                catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.info("sleep end.");
+            });
+        });
+        // 等待执行结束
+        runner.waitCompleted();
+
+        log.info("doParallel end.");
     }
 
 }

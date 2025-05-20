@@ -188,4 +188,10 @@ public class ArticleController extends BaseController {
         articleService.doLock();
     }
 
+
+    @Operation(summary = "并发线程")
+    @GetMapping("/do_parallel")
+    public void doParallel() {
+        articleService.doParallel();
+    }
 }
