@@ -11,12 +11,14 @@ import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurerSupport;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
@@ -114,6 +116,15 @@ public class RedisConfig extends CachingConfigurerSupport {
     }
 
     @Bean(value = "redissonClient", destroyMethod = "shutdown")
+    @ConditionalOnProperty(prefix = "spring.redis.embedded", name = "enabled", havingValue = "true")
+    @DependsOn("embeddedRedisServer")
+    public RedissonClient redissonClientEmbedded(RedisProperties properties) {
+        final Config config = createSingleServerConfig(properties);
+        return Redisson.create(config);
+    }
+
+    @Bean(value = "redissonClient", destroyMethod = "shutdown")
+    @ConditionalOnProperty(prefix = "spring.redis.embedded", name = "enabled", havingValue = "false", matchIfMissing = true)
     public RedissonClient redissonClient(RedisProperties properties) {
         final Config config = createSingleServerConfig(properties);
         return Redisson.create(config);

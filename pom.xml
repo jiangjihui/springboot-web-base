@@ -123,6 +123,12 @@
             <version>3.36.0</version>
         </dependency>
 
+        <!-- 本地redis服务 -->
+        <dependency>
+            <groupId>it.ozimov</groupId>
+            <artifactId>embedded-redis</artifactId>
+            <version>0.7.3</version>
+        </dependency>
 
         <!-- shiro -->
         <dependency>
